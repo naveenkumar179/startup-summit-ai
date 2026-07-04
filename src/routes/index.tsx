@@ -1,6 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Hero } from "@/components/landing/Hero";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -23,6 +25,26 @@ export const Route = createFileRoute("/")({
 });
 
 function LandingPage() {
+  const { isLoading, isAuthenticated, hasRole, user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoading || !isAuthenticated) return;
+    if (!hasRole) {
+      navigate({ to: "/select-role" });
+    } else {
+      navigate({ to: user!.role === "investor" ? "/investor/dashboard" : "/founder/dashboard" });
+    }
+  }, [isLoading, isAuthenticated, hasRole, user]);
+
+  if (isAuthenticated) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />

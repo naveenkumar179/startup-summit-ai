@@ -42,12 +42,16 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button variant="outline" className="rounded-lg">
-            Login
-          </Button>
-          <Button className="rounded-lg bg-primary hover:bg-primary/90 shadow-[var(--shadow-glow)]">
-            Sign Up
-          </Button>
+          <a href="/api/login">
+            <Button variant="outline" className="rounded-lg">
+              Login
+            </Button>
+          </a>
+          <a href="/api/login">
+            <Button className="rounded-lg bg-primary hover:bg-primary/90 shadow-[var(--shadow-glow)]">
+              Sign Up
+            </Button>
+          </a>
         </div>
       </div>
     </header>

@@ -9,38 +9,153 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SelectRoleRouteImport } from './routes/select-role'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as InvestorDashboardRouteImport } from './routes/investor/dashboard'
+import { Route as FounderDashboardRouteImport } from './routes/founder/dashboard'
+import { Route as ApiLogoutRouteImport } from './routes/api/logout'
+import { Route as ApiLoginRouteImport } from './routes/api/login'
+import { Route as ApiCallbackRouteImport } from './routes/api/callback'
+import { Route as ApiAuthUserRouteImport } from './routes/api/auth/user'
+import { Route as ApiAuthRoleRouteImport } from './routes/api/auth/role'
 
+const SelectRoleRoute = SelectRoleRouteImport.update({
+  id: '/select-role',
+  path: '/select-role',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InvestorDashboardRoute = InvestorDashboardRouteImport.update({
+  id: '/investor/dashboard',
+  path: '/investor/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FounderDashboardRoute = FounderDashboardRouteImport.update({
+  id: '/founder/dashboard',
+  path: '/founder/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLogoutRoute = ApiLogoutRouteImport.update({
+  id: '/api/logout',
+  path: '/api/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLoginRoute = ApiLoginRouteImport.update({
+  id: '/api/login',
+  path: '/api/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCallbackRoute = ApiCallbackRouteImport.update({
+  id: '/api/callback',
+  path: '/api/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthUserRoute = ApiAuthUserRouteImport.update({
+  id: '/api/auth/user',
+  path: '/api/auth/user',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthRoleRoute = ApiAuthRoleRouteImport.update({
+  id: '/api/auth/role',
+  path: '/api/auth/role',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/select-role': typeof SelectRoleRoute
+  '/api/callback': typeof ApiCallbackRoute
+  '/api/login': typeof ApiLoginRoute
+  '/api/logout': typeof ApiLogoutRoute
+  '/founder/dashboard': typeof FounderDashboardRoute
+  '/investor/dashboard': typeof InvestorDashboardRoute
+  '/api/auth/role': typeof ApiAuthRoleRoute
+  '/api/auth/user': typeof ApiAuthUserRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/select-role': typeof SelectRoleRoute
+  '/api/callback': typeof ApiCallbackRoute
+  '/api/login': typeof ApiLoginRoute
+  '/api/logout': typeof ApiLogoutRoute
+  '/founder/dashboard': typeof FounderDashboardRoute
+  '/investor/dashboard': typeof InvestorDashboardRoute
+  '/api/auth/role': typeof ApiAuthRoleRoute
+  '/api/auth/user': typeof ApiAuthUserRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/select-role': typeof SelectRoleRoute
+  '/api/callback': typeof ApiCallbackRoute
+  '/api/login': typeof ApiLoginRoute
+  '/api/logout': typeof ApiLogoutRoute
+  '/founder/dashboard': typeof FounderDashboardRoute
+  '/investor/dashboard': typeof InvestorDashboardRoute
+  '/api/auth/role': typeof ApiAuthRoleRoute
+  '/api/auth/user': typeof ApiAuthUserRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/select-role'
+    | '/api/callback'
+    | '/api/login'
+    | '/api/logout'
+    | '/founder/dashboard'
+    | '/investor/dashboard'
+    | '/api/auth/role'
+    | '/api/auth/user'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/select-role'
+    | '/api/callback'
+    | '/api/login'
+    | '/api/logout'
+    | '/founder/dashboard'
+    | '/investor/dashboard'
+    | '/api/auth/role'
+    | '/api/auth/user'
+  id:
+    | '__root__'
+    | '/'
+    | '/select-role'
+    | '/api/callback'
+    | '/api/login'
+    | '/api/logout'
+    | '/founder/dashboard'
+    | '/investor/dashboard'
+    | '/api/auth/role'
+    | '/api/auth/user'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SelectRoleRoute: typeof SelectRoleRoute
+  ApiCallbackRoute: typeof ApiCallbackRoute
+  ApiLoginRoute: typeof ApiLoginRoute
+  ApiLogoutRoute: typeof ApiLogoutRoute
+  FounderDashboardRoute: typeof FounderDashboardRoute
+  InvestorDashboardRoute: typeof InvestorDashboardRoute
+  ApiAuthRoleRoute: typeof ApiAuthRoleRoute
+  ApiAuthUserRoute: typeof ApiAuthUserRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/select-role': {
+      id: '/select-role'
+      path: '/select-role'
+      fullPath: '/select-role'
+      preLoaderRoute: typeof SelectRoleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +163,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/investor/dashboard': {
+      id: '/investor/dashboard'
+      path: '/investor/dashboard'
+      fullPath: '/investor/dashboard'
+      preLoaderRoute: typeof InvestorDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/founder/dashboard': {
+      id: '/founder/dashboard'
+      path: '/founder/dashboard'
+      fullPath: '/founder/dashboard'
+      preLoaderRoute: typeof FounderDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/logout': {
+      id: '/api/logout'
+      path: '/api/logout'
+      fullPath: '/api/logout'
+      preLoaderRoute: typeof ApiLogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/login': {
+      id: '/api/login'
+      path: '/api/login'
+      fullPath: '/api/login'
+      preLoaderRoute: typeof ApiLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/callback': {
+      id: '/api/callback'
+      path: '/api/callback'
+      fullPath: '/api/callback'
+      preLoaderRoute: typeof ApiCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/user': {
+      id: '/api/auth/user'
+      path: '/api/auth/user'
+      fullPath: '/api/auth/user'
+      preLoaderRoute: typeof ApiAuthUserRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/role': {
+      id: '/api/auth/role'
+      path: '/api/auth/role'
+      fullPath: '/api/auth/role'
+      preLoaderRoute: typeof ApiAuthRoleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SelectRoleRoute: SelectRoleRoute,
+  ApiCallbackRoute: ApiCallbackRoute,
+  ApiLoginRoute: ApiLoginRoute,
+  ApiLogoutRoute: ApiLogoutRoute,
+  FounderDashboardRoute: FounderDashboardRoute,
+  InvestorDashboardRoute: InvestorDashboardRoute,
+  ApiAuthRoleRoute: ApiAuthRoleRoute,
+  ApiAuthUserRoute: ApiAuthUserRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

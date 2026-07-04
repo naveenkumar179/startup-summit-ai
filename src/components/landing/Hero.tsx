@@ -50,21 +50,27 @@ export function Hero() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-4">
-              <button className="group flex items-center gap-4 rounded-xl bg-primary px-6 py-4 text-primary-foreground shadow-[var(--shadow-glow)] hover:bg-primary/90 transition">
+              <a
+                href="/api/login"
+                className="group flex items-center gap-4 rounded-xl bg-primary px-6 py-4 text-primary-foreground shadow-[var(--shadow-glow)] hover:bg-primary/90 transition"
+              >
                 <div className="text-left">
                   <div className="text-base font-semibold">I'm a Founder</div>
                   <div className="text-xs opacity-90">Share your idea</div>
                 </div>
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </button>
+              </a>
 
-              <button className="group flex items-center gap-4 rounded-xl border border-border bg-card px-6 py-4 text-foreground hover:border-primary/40 hover:bg-accent transition">
+              <a
+                href="/api/login"
+                className="group flex items-center gap-4 rounded-xl border border-border bg-card px-6 py-4 text-foreground hover:border-primary/40 hover:bg-accent transition"
+              >
                 <div className="text-left">
                   <div className="text-base font-semibold">I'm an Investor</div>
                   <div className="text-xs text-muted-foreground">Discover startups</div>
                 </div>
                 <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1" />
-              </button>
+              </a>
             </div>
 
             {/* Feature strip */}
