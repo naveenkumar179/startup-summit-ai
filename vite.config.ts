@@ -12,4 +12,20 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Replit deployments run a Node process, not a Cloudflare Worker, so target node-server.
+  nitro: { preset: "node-server" },
+  vite: {
+    server: {
+      host: "0.0.0.0",
+      port: 5000,
+      strictPort: true,
+      allowedHosts: true,
+    },
+    preview: {
+      host: "0.0.0.0",
+      port: 5000,
+      strictPort: true,
+      allowedHosts: true,
+    },
+  },
 });
