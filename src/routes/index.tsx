@@ -1,24 +1,32 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Navbar } from "@/components/landing/Navbar";
+import { Hero } from "@/components/landing/Hero";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "StartupBridge — AI-Powered Platform for Startups & Investors" },
+      {
+        name: "description",
+        content:
+          "StartupBridge is an AI-powered platform that connects innovative startups with the right investors. Pitch, analyze, and invest smarter.",
+      },
+      { property: "og:title", content: "StartupBridge — Connect. Pitch. Invest." },
+      {
+        property: "og:description",
+        content:
+          "AI-powered analysis, smart matching, and data-driven investment decisions for founders and investors.",
+      },
+    ],
+  }),
+  component: LandingPage,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function LandingPage() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <Hero />
     </div>
   );
 }
