@@ -13,11 +13,14 @@ import { Route as SelectRoleRouteImport } from './routes/select-role'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as InvestorDashboardRouteImport } from './routes/investor/dashboard'
 import { Route as FounderDashboardRouteImport } from './routes/founder/dashboard'
+import { Route as ApiMatchesRouteImport } from './routes/api/matches'
 import { Route as ApiLogoutRouteImport } from './routes/api/logout'
 import { Route as ApiLoginRouteImport } from './routes/api/login'
 import { Route as ApiCallbackRouteImport } from './routes/api/callback'
 import { Route as ApiPitchDeckIndexRouteImport } from './routes/api/pitch-deck/index'
 import { Route as ApiPitchDeckUploadRouteImport } from './routes/api/pitch-deck/upload'
+import { Route as ApiInvestorProfileRouteImport } from './routes/api/investor/profile'
+import { Route as ApiFounderProfileRouteImport } from './routes/api/founder/profile'
 import { Route as ApiAuthUserRouteImport } from './routes/api/auth/user'
 import { Route as ApiAuthRoleRouteImport } from './routes/api/auth/role'
 
@@ -39,6 +42,11 @@ const InvestorDashboardRoute = InvestorDashboardRouteImport.update({
 const FounderDashboardRoute = FounderDashboardRouteImport.update({
   id: '/founder/dashboard',
   path: '/founder/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMatchesRoute = ApiMatchesRouteImport.update({
+  id: '/api/matches',
+  path: '/api/matches',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiLogoutRoute = ApiLogoutRouteImport.update({
@@ -66,6 +74,16 @@ const ApiPitchDeckUploadRoute = ApiPitchDeckUploadRouteImport.update({
   path: '/api/pitch-deck/upload',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiInvestorProfileRoute = ApiInvestorProfileRouteImport.update({
+  id: '/api/investor/profile',
+  path: '/api/investor/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiFounderProfileRoute = ApiFounderProfileRouteImport.update({
+  id: '/api/founder/profile',
+  path: '/api/founder/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthUserRoute = ApiAuthUserRouteImport.update({
   id: '/api/auth/user',
   path: '/api/auth/user',
@@ -83,10 +101,13 @@ export interface FileRoutesByFullPath {
   '/api/callback': typeof ApiCallbackRoute
   '/api/login': typeof ApiLoginRoute
   '/api/logout': typeof ApiLogoutRoute
+  '/api/matches': typeof ApiMatchesRoute
   '/founder/dashboard': typeof FounderDashboardRoute
   '/investor/dashboard': typeof InvestorDashboardRoute
   '/api/auth/role': typeof ApiAuthRoleRoute
   '/api/auth/user': typeof ApiAuthUserRoute
+  '/api/founder/profile': typeof ApiFounderProfileRoute
+  '/api/investor/profile': typeof ApiInvestorProfileRoute
   '/api/pitch-deck/upload': typeof ApiPitchDeckUploadRoute
   '/api/pitch-deck/': typeof ApiPitchDeckIndexRoute
 }
@@ -96,10 +117,13 @@ export interface FileRoutesByTo {
   '/api/callback': typeof ApiCallbackRoute
   '/api/login': typeof ApiLoginRoute
   '/api/logout': typeof ApiLogoutRoute
+  '/api/matches': typeof ApiMatchesRoute
   '/founder/dashboard': typeof FounderDashboardRoute
   '/investor/dashboard': typeof InvestorDashboardRoute
   '/api/auth/role': typeof ApiAuthRoleRoute
   '/api/auth/user': typeof ApiAuthUserRoute
+  '/api/founder/profile': typeof ApiFounderProfileRoute
+  '/api/investor/profile': typeof ApiInvestorProfileRoute
   '/api/pitch-deck/upload': typeof ApiPitchDeckUploadRoute
   '/api/pitch-deck': typeof ApiPitchDeckIndexRoute
 }
@@ -110,10 +134,13 @@ export interface FileRoutesById {
   '/api/callback': typeof ApiCallbackRoute
   '/api/login': typeof ApiLoginRoute
   '/api/logout': typeof ApiLogoutRoute
+  '/api/matches': typeof ApiMatchesRoute
   '/founder/dashboard': typeof FounderDashboardRoute
   '/investor/dashboard': typeof InvestorDashboardRoute
   '/api/auth/role': typeof ApiAuthRoleRoute
   '/api/auth/user': typeof ApiAuthUserRoute
+  '/api/founder/profile': typeof ApiFounderProfileRoute
+  '/api/investor/profile': typeof ApiInvestorProfileRoute
   '/api/pitch-deck/upload': typeof ApiPitchDeckUploadRoute
   '/api/pitch-deck/': typeof ApiPitchDeckIndexRoute
 }
@@ -125,10 +152,13 @@ export interface FileRouteTypes {
     | '/api/callback'
     | '/api/login'
     | '/api/logout'
+    | '/api/matches'
     | '/founder/dashboard'
     | '/investor/dashboard'
     | '/api/auth/role'
     | '/api/auth/user'
+    | '/api/founder/profile'
+    | '/api/investor/profile'
     | '/api/pitch-deck/upload'
     | '/api/pitch-deck/'
   fileRoutesByTo: FileRoutesByTo
@@ -138,10 +168,13 @@ export interface FileRouteTypes {
     | '/api/callback'
     | '/api/login'
     | '/api/logout'
+    | '/api/matches'
     | '/founder/dashboard'
     | '/investor/dashboard'
     | '/api/auth/role'
     | '/api/auth/user'
+    | '/api/founder/profile'
+    | '/api/investor/profile'
     | '/api/pitch-deck/upload'
     | '/api/pitch-deck'
   id:
@@ -151,10 +184,13 @@ export interface FileRouteTypes {
     | '/api/callback'
     | '/api/login'
     | '/api/logout'
+    | '/api/matches'
     | '/founder/dashboard'
     | '/investor/dashboard'
     | '/api/auth/role'
     | '/api/auth/user'
+    | '/api/founder/profile'
+    | '/api/investor/profile'
     | '/api/pitch-deck/upload'
     | '/api/pitch-deck/'
   fileRoutesById: FileRoutesById
@@ -165,10 +201,13 @@ export interface RootRouteChildren {
   ApiCallbackRoute: typeof ApiCallbackRoute
   ApiLoginRoute: typeof ApiLoginRoute
   ApiLogoutRoute: typeof ApiLogoutRoute
+  ApiMatchesRoute: typeof ApiMatchesRoute
   FounderDashboardRoute: typeof FounderDashboardRoute
   InvestorDashboardRoute: typeof InvestorDashboardRoute
   ApiAuthRoleRoute: typeof ApiAuthRoleRoute
   ApiAuthUserRoute: typeof ApiAuthUserRoute
+  ApiFounderProfileRoute: typeof ApiFounderProfileRoute
+  ApiInvestorProfileRoute: typeof ApiInvestorProfileRoute
   ApiPitchDeckUploadRoute: typeof ApiPitchDeckUploadRoute
   ApiPitchDeckIndexRoute: typeof ApiPitchDeckIndexRoute
 }
@@ -201,6 +240,13 @@ declare module '@tanstack/react-router' {
       path: '/founder/dashboard'
       fullPath: '/founder/dashboard'
       preLoaderRoute: typeof FounderDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/matches': {
+      id: '/api/matches'
+      path: '/api/matches'
+      fullPath: '/api/matches'
+      preLoaderRoute: typeof ApiMatchesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/logout': {
@@ -238,6 +284,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPitchDeckUploadRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/investor/profile': {
+      id: '/api/investor/profile'
+      path: '/api/investor/profile'
+      fullPath: '/api/investor/profile'
+      preLoaderRoute: typeof ApiInvestorProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/founder/profile': {
+      id: '/api/founder/profile'
+      path: '/api/founder/profile'
+      fullPath: '/api/founder/profile'
+      preLoaderRoute: typeof ApiFounderProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/user': {
       id: '/api/auth/user'
       path: '/api/auth/user'
@@ -261,10 +321,13 @@ const rootRouteChildren: RootRouteChildren = {
   ApiCallbackRoute: ApiCallbackRoute,
   ApiLoginRoute: ApiLoginRoute,
   ApiLogoutRoute: ApiLogoutRoute,
+  ApiMatchesRoute: ApiMatchesRoute,
   FounderDashboardRoute: FounderDashboardRoute,
   InvestorDashboardRoute: InvestorDashboardRoute,
   ApiAuthRoleRoute: ApiAuthRoleRoute,
   ApiAuthUserRoute: ApiAuthUserRoute,
+  ApiFounderProfileRoute: ApiFounderProfileRoute,
+  ApiInvestorProfileRoute: ApiInvestorProfileRoute,
   ApiPitchDeckUploadRoute: ApiPitchDeckUploadRoute,
   ApiPitchDeckIndexRoute: ApiPitchDeckIndexRoute,
 }

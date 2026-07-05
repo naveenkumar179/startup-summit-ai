@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { DashboardLayout, type SidebarItem } from "@/components/dashboard/DashboardLayout";
 import { PitchDeckUpload } from "@/components/pitch-deck/PitchDeckUpload";
+import { FounderMatchList } from "@/components/matches/FounderMatchList";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/founder/dashboard")({
@@ -96,14 +97,7 @@ function FounderDashboard() {
 
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
         <PitchDeckUpload />
-
-        <div className="rounded-2xl border border-dashed border-border bg-card p-8 text-center">
-          <Users className="mx-auto h-8 w-8 text-muted-foreground" />
-          <h3 className="mt-3 font-semibold text-foreground">No investor matches yet</h3>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Once your pitch deck is analyzed, we'll surface investors that fit your startup.
-          </p>
-        </div>
+        <FounderMatchList />
       </div>
     </DashboardLayout>
   );

@@ -63,3 +63,43 @@ export type PitchDeckAnalysis = {
   }[];
   suggestedInvestorTypes: string[];
 };
+
+export const startupStageEnum = pgEnum("startup_stage", [
+  "idea",
+  "pre_seed",
+  "seed",
+  "series_a",
+  "series_b_plus",
+]);
+
+export const founderProfiles = pgTable("founder_profiles", {
+  userId: varchar("user_id")
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
+  companyName: varchar("company_name").notNull(),
+  industry: varchar("industry").notNull(),
+  stage: startupStageEnum("stage").notNull(),
+  fundingAsk: varchar("funding_ask"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export type FounderProfile = typeof founderProfiles.$inferSelect;
+export type InsertFounderProfile = typeof founderProfiles.$inferInsert;
+
+export const investorProfiles = pgTable("investor_profiles", {
+  userId: varchar("user_id")
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
+  firmName: varchar("firm_name"),
+  industries: text("industries").array().notNull().default(sql`'{}'::text[]`),
+  stagePreferences: startupStageEnum("stage_preferences").array().notNull().default(sql`'{}'::startup_stage[]`),
+  checkSizeMin: varchar("check_size_min"),
+  checkSizeMax: varchar("check_size_max"),
+  bio: text("bio"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export type InvestorProfile = typeof investorProfiles.$inferSelect;
+export type InsertInvestorProfile = typeof investorProfiles.$inferInsert;

@@ -12,6 +12,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { DashboardLayout, type SidebarItem } from "@/components/dashboard/DashboardLayout";
+import { InvestorMatchList } from "@/components/matches/InvestorMatchList";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/investor/dashboard")({
@@ -92,13 +93,7 @@ function InvestorDashboard() {
         ))}
       </div>
 
-      <div className="mt-6 rounded-2xl border border-dashed border-border bg-card p-8 text-center">
-        <Search className="mx-auto h-8 w-8 text-muted-foreground" />
-        <h3 className="mt-3 font-semibold text-foreground">No startups to show yet</h3>
-        <p className="mt-1 text-sm text-muted-foreground">
-          As founders join and upload pitch decks, matching startups will appear here.
-        </p>
-      </div>
+      <InvestorMatchList />
     </DashboardLayout>
   );
 }
