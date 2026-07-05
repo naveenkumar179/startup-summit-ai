@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
-import { LogOut } from "lucide-react";
+import { LogOut, Search, Bell, Mail, ChevronDown } from "lucide-react";
 import { BrandMark } from "@/components/landing/BrandMark";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -42,7 +42,7 @@ export function DashboardLayout({
                 to={item.to}
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
                   item.active
-                    ? "bg-accent font-medium text-primary"
+                    ? "bg-primary text-primary-foreground font-medium shadow-sm"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 }`}
               >
@@ -74,23 +74,49 @@ export function DashboardLayout({
       </aside>
 
       <div className="flex flex-1 flex-col">
-        <header className="flex h-16 items-center justify-between border-b border-border bg-background/80 px-6 backdrop-blur-md">
-          <h1 className="text-lg font-semibold text-foreground">{title}</h1>
-          <div className="flex items-center gap-3">
-            <span className="hidden text-sm text-muted-foreground sm:inline">
-              {user?.firstName ? `${user.firstName} ${user.lastName ?? ""}` : user?.email}
-            </span>
-            {user?.profileImageUrl ? (
-              <img
-                src={user.profileImageUrl}
-                alt="Profile"
-                className="h-9 w-9 rounded-full object-cover"
+        <header className="flex h-16 items-center justify-between gap-4 border-b border-border bg-background/80 px-6 backdrop-blur-md">
+          <div className="flex min-w-0 flex-1 items-center gap-4">
+            <h1 className="hidden shrink-0 text-lg font-semibold text-foreground lg:block">{title}</h1>
+            <div className="relative hidden max-w-sm flex-1 sm:block">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Search startups, investors, industries..."
+                className="h-9 w-full rounded-full border border-border bg-card pl-9 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
-            ) : (
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
-                {initials}
+            </div>
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
+            <button className="relative flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+              <Bell className="h-4.5 w-4.5" />
+              <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-destructive" />
+            </button>
+            <button className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+              <Mail className="h-4.5 w-4.5" />
+            </button>
+            <div className="mx-1 hidden h-6 w-px bg-border sm:block" />
+            <div className="flex items-center gap-2 rounded-full py-1 pl-1 pr-2 transition-colors hover:bg-accent">
+              {user?.profileImageUrl ? (
+                <img
+                  src={user.profileImageUrl}
+                  alt="Profile"
+                  className="h-8 w-8 rounded-full object-cover"
+                />
+              ) : (
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+                  {initials}
+                </div>
+              )}
+              <div className="hidden leading-tight sm:block">
+                <div className="text-sm font-medium text-foreground">
+                  {user?.firstName ? `${user.firstName} ${user.lastName ?? ""}` : user?.email}
+                </div>
+                {user?.role && (
+                  <div className="text-xs capitalize text-muted-foreground">{user.role}</div>
+                )}
               </div>
-            )}
+              <ChevronDown className="hidden h-3.5 w-3.5 text-muted-foreground sm:block" />
+            </div>
           </div>
         </header>
 

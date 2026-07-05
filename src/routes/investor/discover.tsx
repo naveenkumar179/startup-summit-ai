@@ -1,9 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { Search, Rocket, Loader2, ArrowUpRight } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Search, Rocket, Loader2, ArrowUpRight, Sparkles, Heart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -16,6 +17,12 @@ import { investorSidebar } from "@/components/dashboard/sidebars";
 import { useAuth } from "@/hooks/use-auth";
 import { INDUSTRY_OPTIONS, stageLabel, STAGE_OPTIONS } from "@/lib/constants";
 import type { Startup } from "@/lib/server/db/schema";
+
+function scoreLabel(score: number) {
+  if (score >= 80) return "High Potential";
+  if (score >= 60) return "Good Potential";
+  return "Early Stage";
+}
 
 export const Route = createFileRoute("/investor/discover")({
   component: DiscoverStartupsPage,
@@ -51,10 +58,42 @@ function DiscoverStartupsPage() {
     }
   }, [isLoading, isAuthenticated, hasRole, user]);
 
+  const queryClient = useQueryClient();
+
   const { data: startups, isLoading: startupsLoading } = useQuery({
     queryKey: ["/api/startups/discover"],
     queryFn: fetchDiscoverStartups,
     enabled: !isLoading && isAuthenticated && hasRole && user?.role === "investor",
+  });
+
+  const { data: watchlistIds } = useQuery({
+    queryKey: ["/api/watchlist", "ids"],
+    queryFn: async () => {
+      const res = await fetch("/api/watchlist");
+      if (!res.ok) return [] as string[];
+      const items = (await res.json()) as { watchlist: { startupId: string } }[];
+      return items.map((i) => i.watchlist.startupId);
+    },
+    enabled: !isLoading && isAuthenticated && hasRole && user?.role === "investor",
+  });
+
+  const toggleWatchlist = useMutation({
+    mutationFn: async ({ startupId, saved }: { startupId: string; saved: boolean }) => {
+      if (saved) {
+        const res = await fetch(`/api/watchlist/${startupId}`, { method: "DELETE" });
+        if (!res.ok) throw new Error("Failed to update watchlist");
+      } else {
+        const res = await fetch("/api/watchlist", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ startupId }),
+        });
+        if (!res.ok) throw new Error("Failed to update watchlist");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/watchlist"] });
+    },
   });
 
   const filtered = useMemo(() => {
@@ -129,34 +168,72 @@ function DiscoverStartupsPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((s) => (
-            <Link key={s.id} to="/startups/$id" params={{ id: s.id }} className="block">
-              <div className="h-full rounded-2xl border border-border bg-card p-5 transition hover:border-primary/50">
-                <div className="flex items-center gap-3">
-                  {s.logoUrl ? (
-                    <img src={s.logoUrl} alt="" className="h-10 w-10 rounded-lg object-cover" />
+          {filtered.map((s) => {
+            const score = s.detailedAnalysis?.investmentReadinessScore;
+            const saved = watchlistIds?.includes(s.id) ?? false;
+            return (
+              <div
+                key={s.id}
+                className="flex h-full flex-col rounded-2xl border border-border bg-card p-5 transition hover:border-primary/50 hover:shadow-sm"
+              >
+                <div className="flex items-start justify-between">
+                  {score != null ? (
+                    <Badge className="gap-1 bg-accent text-primary hover:bg-accent" variant="secondary">
+                      <Sparkles className="h-3 w-3" />
+                      AI Analysis
+                    </Badge>
                   ) : (
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent">
-                      <Rocket className="h-5 w-5 text-primary" />
-                    </div>
+                    <span />
                   )}
-                  <div>
-                    <h4 className="font-semibold text-foreground">{s.name}</h4>
-                    <p className="text-xs text-muted-foreground">{s.tagline}</p>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toggleWatchlist.mutate({ startupId: s.id, saved });
+                    }}
+                    disabled={toggleWatchlist.isPending}
+                    className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-destructive"
+                  >
+                    <Heart className={`h-4 w-4 ${saved ? "fill-destructive text-destructive" : ""}`} />
+                  </button>
+                </div>
+
+                <Link to="/startups/$id" params={{ id: s.id }} className="mt-3 flex flex-1 flex-col">
+                  <div className="flex items-center gap-3">
+                    {s.logoUrl ? (
+                      <img src={s.logoUrl} alt="" className="h-10 w-10 rounded-lg object-cover" />
+                    ) : (
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent">
+                        <Rocket className="h-5 w-5 text-primary" />
+                      </div>
+                    )}
+                    <div>
+                      <h4 className="font-semibold text-foreground">{s.name}</h4>
+                      <p className="text-xs text-muted-foreground">{s.industry}</p>
+                    </div>
                   </div>
-                </div>
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  <Badge variant="secondary">{s.industry}</Badge>
-                  <Badge variant="secondary">{stageLabel(s.stage)}</Badge>
-                  {s.fundingRequired && <Badge variant="outline">Raising {s.fundingRequired}</Badge>}
-                </div>
-                <div className="mt-4 flex items-center gap-1 text-sm font-medium text-primary">
-                  View details
-                  <ArrowUpRight className="h-3.5 w-3.5" />
-                </div>
+
+                  {s.tagline && (
+                    <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">{s.tagline}</p>
+                  )}
+
+                  <div className="mt-4 flex flex-wrap items-center gap-1.5">
+                    <Badge variant="secondary">{stageLabel(s.stage)}</Badge>
+                    {s.fundingRequired && <Badge variant="outline">{s.fundingRequired}</Badge>}
+                    {score != null && (
+                      <Badge className="ml-auto gap-1 bg-success/10 text-success hover:bg-success/10" variant="secondary">
+                        {score} {scoreLabel(score)}
+                      </Badge>
+                    )}
+                  </div>
+
+                  <div className="mt-4 flex items-center gap-1 text-sm font-medium text-primary">
+                    View Details
+                    <ArrowUpRight className="h-3.5 w-3.5" />
+                  </div>
+                </Link>
               </div>
-            </Link>
-          ))}
+            );
+          })}
         </div>
       )}
     </DashboardLayout>

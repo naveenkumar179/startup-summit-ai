@@ -132,7 +132,21 @@ function StartupDetailsPage() {
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-3">
+                {data.startup.detailedAnalysis && (
+                  <div className="flex items-center gap-3 rounded-xl border border-border bg-accent/40 px-4 py-2">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-success text-sm font-bold text-success">
+                      {data.startup.detailedAnalysis.investmentReadinessScore}
+                    </div>
+                    <div className="leading-tight">
+                      <div className="text-xs font-medium text-foreground">Investment Readiness</div>
+                      <div className="text-xs text-muted-foreground">out of 100</div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex w-full flex-wrap items-center gap-2 lg:w-auto">
                 {data.isOwner ? (
                   <Link to="/founder/startups/$id/edit" params={{ id }}>
                     <Button variant="outline">
