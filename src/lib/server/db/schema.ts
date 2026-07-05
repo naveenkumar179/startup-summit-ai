@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { index, jsonb, pgEnum, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import { boolean, index, jsonb, pgEnum, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
 
 export const userRoleEnum = pgEnum("user_role", ["founder", "investor", "admin"]);
 
@@ -270,3 +270,34 @@ export const meetings = pgTable(
 
 export type Meeting = typeof meetings.$inferSelect;
 export type InsertMeeting = typeof meetings.$inferInsert;
+
+export const notificationTypeEnum = pgEnum("notification_type", [
+  "meeting_requested",
+  "meeting_confirmed",
+  "meeting_declined",
+  "meeting_cancelled",
+  "message_received",
+]);
+
+export const notifications = pgTable(
+  "notifications",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    userId: varchar("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    type: notificationTypeEnum("type").notNull(),
+    title: varchar("title").notNull(),
+    body: text("body"),
+    link: varchar("link"),
+    isRead: boolean("is_read").notNull().default(false),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (table) => [
+    index("IDX_notifications_user").on(table.userId),
+    index("IDX_notifications_user_read").on(table.userId, table.isRead),
+  ]
+);
+
+export type Notification = typeof notifications.$inferSelect;
+export type InsertNotification = typeof notifications.$inferInsert;

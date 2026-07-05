@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
-import { LogOut, Search, Bell, Mail, ChevronDown } from "lucide-react";
+import { LogOut, Search, Mail, ChevronDown } from "lucide-react";
 import { BrandMark } from "@/components/landing/BrandMark";
+import { NotificationBell } from "@/components/dashboard/NotificationBell";
 import { useAuth } from "@/hooks/use-auth";
 
 export type SidebarItem = {
@@ -87,10 +88,7 @@ export function DashboardLayout({
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            <button className="relative flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
-              <Bell className="h-4.5 w-4.5" />
-              <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-destructive" />
-            </button>
+            <NotificationBell />
             <button className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
               <Mail className="h-4.5 w-4.5" />
             </button>

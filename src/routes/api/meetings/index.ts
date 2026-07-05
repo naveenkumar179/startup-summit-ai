@@ -3,6 +3,7 @@ import { desc, eq, or } from "drizzle-orm";
 import { requireUser } from "@/lib/server/auth";
 import { db } from "@/lib/server/db";
 import { meetings, startups, users } from "@/lib/server/db/schema";
+import { createNotification } from "@/lib/server/notifications";
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -88,6 +89,15 @@ export const Route = createFileRoute("/api/meetings/")({
               status: "pending",
             })
             .returning();
+
+          const investorName = user.firstName ? `${user.firstName} ${user.lastName ?? ""}`.trim() : user.email;
+          await createNotification({
+            userId: startup.founderId,
+            type: "meeting_requested",
+            title: "New meeting request",
+            body: `${investorName} requested to meet about ${startup.name}`,
+            link: "/founder/meetings",
+          });
 
           return jsonResponse(meeting, 201);
         } catch (error) {

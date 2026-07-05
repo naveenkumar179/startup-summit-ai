@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { and, eq, or } from "drizzle-orm";
 import { requireUser } from "@/lib/server/auth";
 import { db } from "@/lib/server/db";
-import { meetings } from "@/lib/server/db/schema";
+import { meetings, startups } from "@/lib/server/db/schema";
+import { createNotification } from "@/lib/server/notifications";
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -55,6 +56,39 @@ export const Route = createFileRoute("/api/meetings/$id")({
               )
             )
             .returning();
+
+          if (updated && body.status) {
+            const [startup] = await db.select().from(startups).where(eq(startups.id, updated.startupId));
+            const startupName = startup?.name ?? "the startup";
+
+            if (body.status === "confirmed") {
+              await createNotification({
+                userId: updated.investorId,
+                type: "meeting_confirmed",
+                title: "Meeting confirmed",
+                body: `Your meeting request about ${startupName} was confirmed`,
+                link: "/investor/meetings",
+              });
+            } else if (body.status === "declined") {
+              await createNotification({
+                userId: updated.investorId,
+                type: "meeting_declined",
+                title: "Meeting declined",
+                body: `Your meeting request about ${startupName} was declined`,
+                link: "/investor/meetings",
+              });
+            } else if (body.status === "cancelled") {
+              const notifyUserId = user.id === updated.investorId ? updated.founderId : updated.investorId;
+              const notifyLink = notifyUserId === updated.founderId ? "/founder/meetings" : "/investor/meetings";
+              await createNotification({
+                userId: notifyUserId,
+                type: "meeting_cancelled",
+                title: "Meeting cancelled",
+                body: `The meeting about ${startupName} was cancelled`,
+                link: notifyLink,
+              });
+            }
+          }
 
           return jsonResponse(updated);
         } catch (error) {

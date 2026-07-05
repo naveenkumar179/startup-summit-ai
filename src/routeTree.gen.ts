@@ -29,6 +29,7 @@ import { Route as FounderStartupsIndexRouteImport } from './routes/founder/start
 import { Route as ApiWatchlistIndexRouteImport } from './routes/api/watchlist/index'
 import { Route as ApiStartupsIndexRouteImport } from './routes/api/startups/index'
 import { Route as ApiPitchDeckIndexRouteImport } from './routes/api/pitch-deck/index'
+import { Route as ApiNotificationsIndexRouteImport } from './routes/api/notifications/index'
 import { Route as ApiMeetingsIndexRouteImport } from './routes/api/meetings/index'
 import { Route as ApiConversationsIndexRouteImport } from './routes/api/conversations/index'
 import { Route as StartupsIdDueDiligenceRouteImport } from './routes/startups/$id.due-diligence'
@@ -39,6 +40,7 @@ import { Route as ApiStartupsDiscoverRouteImport } from './routes/api/startups/d
 import { Route as ApiStartupsIdRouteImport } from './routes/api/startups/$id'
 import { Route as ApiSettingsProfileRouteImport } from './routes/api/settings/profile'
 import { Route as ApiPitchDeckUploadRouteImport } from './routes/api/pitch-deck/upload'
+import { Route as ApiNotificationsIdRouteImport } from './routes/api/notifications/$id'
 import { Route as ApiMeetingsIdRouteImport } from './routes/api/meetings/$id'
 import { Route as ApiInvestorProfileRouteImport } from './routes/api/investor/profile'
 import { Route as ApiFounderProfileRouteImport } from './routes/api/founder/profile'
@@ -151,6 +153,11 @@ const ApiPitchDeckIndexRoute = ApiPitchDeckIndexRouteImport.update({
   path: '/api/pitch-deck/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiNotificationsIndexRoute = ApiNotificationsIndexRouteImport.update({
+  id: '/api/notifications/',
+  path: '/api/notifications/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiMeetingsIndexRoute = ApiMeetingsIndexRouteImport.update({
   id: '/api/meetings/',
   path: '/api/meetings/',
@@ -199,6 +206,11 @@ const ApiSettingsProfileRoute = ApiSettingsProfileRouteImport.update({
 const ApiPitchDeckUploadRoute = ApiPitchDeckUploadRouteImport.update({
   id: '/api/pitch-deck/upload',
   path: '/api/pitch-deck/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiNotificationsIdRoute = ApiNotificationsIdRouteImport.update({
+  id: '/api/notifications/$id',
+  path: '/api/notifications/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiMeetingsIdRoute = ApiMeetingsIdRouteImport.update({
@@ -281,6 +293,7 @@ export interface FileRoutesByFullPath {
   '/api/founder/profile': typeof ApiFounderProfileRoute
   '/api/investor/profile': typeof ApiInvestorProfileRoute
   '/api/meetings/$id': typeof ApiMeetingsIdRoute
+  '/api/notifications/$id': typeof ApiNotificationsIdRoute
   '/api/pitch-deck/upload': typeof ApiPitchDeckUploadRoute
   '/api/settings/profile': typeof ApiSettingsProfileRoute
   '/api/startups/$id': typeof ApiStartupsIdRouteWithChildren
@@ -291,6 +304,7 @@ export interface FileRoutesByFullPath {
   '/startups/$id/due-diligence': typeof StartupsIdDueDiligenceRoute
   '/api/conversations/': typeof ApiConversationsIndexRoute
   '/api/meetings/': typeof ApiMeetingsIndexRoute
+  '/api/notifications/': typeof ApiNotificationsIndexRoute
   '/api/pitch-deck/': typeof ApiPitchDeckIndexRoute
   '/api/startups/': typeof ApiStartupsIndexRoute
   '/api/watchlist/': typeof ApiWatchlistIndexRoute
@@ -324,6 +338,7 @@ export interface FileRoutesByTo {
   '/api/founder/profile': typeof ApiFounderProfileRoute
   '/api/investor/profile': typeof ApiInvestorProfileRoute
   '/api/meetings/$id': typeof ApiMeetingsIdRoute
+  '/api/notifications/$id': typeof ApiNotificationsIdRoute
   '/api/pitch-deck/upload': typeof ApiPitchDeckUploadRoute
   '/api/settings/profile': typeof ApiSettingsProfileRoute
   '/api/startups/$id': typeof ApiStartupsIdRouteWithChildren
@@ -334,6 +349,7 @@ export interface FileRoutesByTo {
   '/startups/$id/due-diligence': typeof StartupsIdDueDiligenceRoute
   '/api/conversations': typeof ApiConversationsIndexRoute
   '/api/meetings': typeof ApiMeetingsIndexRoute
+  '/api/notifications': typeof ApiNotificationsIndexRoute
   '/api/pitch-deck': typeof ApiPitchDeckIndexRoute
   '/api/startups': typeof ApiStartupsIndexRoute
   '/api/watchlist': typeof ApiWatchlistIndexRoute
@@ -368,6 +384,7 @@ export interface FileRoutesById {
   '/api/founder/profile': typeof ApiFounderProfileRoute
   '/api/investor/profile': typeof ApiInvestorProfileRoute
   '/api/meetings/$id': typeof ApiMeetingsIdRoute
+  '/api/notifications/$id': typeof ApiNotificationsIdRoute
   '/api/pitch-deck/upload': typeof ApiPitchDeckUploadRoute
   '/api/settings/profile': typeof ApiSettingsProfileRoute
   '/api/startups/$id': typeof ApiStartupsIdRouteWithChildren
@@ -378,6 +395,7 @@ export interface FileRoutesById {
   '/startups/$id/due-diligence': typeof StartupsIdDueDiligenceRoute
   '/api/conversations/': typeof ApiConversationsIndexRoute
   '/api/meetings/': typeof ApiMeetingsIndexRoute
+  '/api/notifications/': typeof ApiNotificationsIndexRoute
   '/api/pitch-deck/': typeof ApiPitchDeckIndexRoute
   '/api/startups/': typeof ApiStartupsIndexRoute
   '/api/watchlist/': typeof ApiWatchlistIndexRoute
@@ -413,6 +431,7 @@ export interface FileRouteTypes {
     | '/api/founder/profile'
     | '/api/investor/profile'
     | '/api/meetings/$id'
+    | '/api/notifications/$id'
     | '/api/pitch-deck/upload'
     | '/api/settings/profile'
     | '/api/startups/$id'
@@ -423,6 +442,7 @@ export interface FileRouteTypes {
     | '/startups/$id/due-diligence'
     | '/api/conversations/'
     | '/api/meetings/'
+    | '/api/notifications/'
     | '/api/pitch-deck/'
     | '/api/startups/'
     | '/api/watchlist/'
@@ -456,6 +476,7 @@ export interface FileRouteTypes {
     | '/api/founder/profile'
     | '/api/investor/profile'
     | '/api/meetings/$id'
+    | '/api/notifications/$id'
     | '/api/pitch-deck/upload'
     | '/api/settings/profile'
     | '/api/startups/$id'
@@ -466,6 +487,7 @@ export interface FileRouteTypes {
     | '/startups/$id/due-diligence'
     | '/api/conversations'
     | '/api/meetings'
+    | '/api/notifications'
     | '/api/pitch-deck'
     | '/api/startups'
     | '/api/watchlist'
@@ -499,6 +521,7 @@ export interface FileRouteTypes {
     | '/api/founder/profile'
     | '/api/investor/profile'
     | '/api/meetings/$id'
+    | '/api/notifications/$id'
     | '/api/pitch-deck/upload'
     | '/api/settings/profile'
     | '/api/startups/$id'
@@ -509,6 +532,7 @@ export interface FileRouteTypes {
     | '/startups/$id/due-diligence'
     | '/api/conversations/'
     | '/api/meetings/'
+    | '/api/notifications/'
     | '/api/pitch-deck/'
     | '/api/startups/'
     | '/api/watchlist/'
@@ -543,6 +567,7 @@ export interface RootRouteChildren {
   ApiFounderProfileRoute: typeof ApiFounderProfileRoute
   ApiInvestorProfileRoute: typeof ApiInvestorProfileRoute
   ApiMeetingsIdRoute: typeof ApiMeetingsIdRoute
+  ApiNotificationsIdRoute: typeof ApiNotificationsIdRoute
   ApiPitchDeckUploadRoute: typeof ApiPitchDeckUploadRoute
   ApiSettingsProfileRoute: typeof ApiSettingsProfileRoute
   ApiStartupsIdRoute: typeof ApiStartupsIdRouteWithChildren
@@ -551,6 +576,7 @@ export interface RootRouteChildren {
   FounderStartupsNewRoute: typeof FounderStartupsNewRoute
   ApiConversationsIndexRoute: typeof ApiConversationsIndexRoute
   ApiMeetingsIndexRoute: typeof ApiMeetingsIndexRoute
+  ApiNotificationsIndexRoute: typeof ApiNotificationsIndexRoute
   ApiPitchDeckIndexRoute: typeof ApiPitchDeckIndexRoute
   ApiStartupsIndexRoute: typeof ApiStartupsIndexRoute
   ApiWatchlistIndexRoute: typeof ApiWatchlistIndexRoute
@@ -702,6 +728,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPitchDeckIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/notifications/': {
+      id: '/api/notifications/'
+      path: '/api/notifications'
+      fullPath: '/api/notifications/'
+      preLoaderRoute: typeof ApiNotificationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/meetings/': {
       id: '/api/meetings/'
       path: '/api/meetings'
@@ -770,6 +803,13 @@ declare module '@tanstack/react-router' {
       path: '/api/pitch-deck/upload'
       fullPath: '/api/pitch-deck/upload'
       preLoaderRoute: typeof ApiPitchDeckUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/notifications/$id': {
+      id: '/api/notifications/$id'
+      path: '/api/notifications/$id'
+      fullPath: '/api/notifications/$id'
+      preLoaderRoute: typeof ApiNotificationsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/meetings/$id': {
@@ -904,6 +944,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiFounderProfileRoute: ApiFounderProfileRoute,
   ApiInvestorProfileRoute: ApiInvestorProfileRoute,
   ApiMeetingsIdRoute: ApiMeetingsIdRoute,
+  ApiNotificationsIdRoute: ApiNotificationsIdRoute,
   ApiPitchDeckUploadRoute: ApiPitchDeckUploadRoute,
   ApiSettingsProfileRoute: ApiSettingsProfileRoute,
   ApiStartupsIdRoute: ApiStartupsIdRouteWithChildren,
@@ -912,6 +953,7 @@ const rootRouteChildren: RootRouteChildren = {
   FounderStartupsNewRoute: FounderStartupsNewRoute,
   ApiConversationsIndexRoute: ApiConversationsIndexRoute,
   ApiMeetingsIndexRoute: ApiMeetingsIndexRoute,
+  ApiNotificationsIndexRoute: ApiNotificationsIndexRoute,
   ApiPitchDeckIndexRoute: ApiPitchDeckIndexRoute,
   ApiStartupsIndexRoute: ApiStartupsIndexRoute,
   ApiWatchlistIndexRoute: ApiWatchlistIndexRoute,
