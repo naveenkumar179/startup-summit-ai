@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { requireUser } from "@/lib/server/auth";
 import { db } from "@/lib/server/db";
 import { pitchDecks, startups } from "@/lib/server/db/schema";
-import { generateDetailedAnalysis } from "@/lib/server/pitch-deck";
+import { runDueDiligencePipeline } from "@/lib/server/agents/supervisorAgent";
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -29,12 +29,19 @@ export const Route = createFileRoute("/api/startups/$id/analyze")({
             return jsonResponse({ message: "This startup has no pitch deck uploaded yet" }, 400);
           }
 
-          const [deck] = await db.select().from(pitchDecks).where(eq(pitchDecks.id, startup.pitchDeckId));
+          const [deck] = await db
+            .select()
+            .from(pitchDecks)
+            .where(eq(pitchDecks.id, startup.pitchDeckId));
           if (!deck?.extractedText) {
             return jsonResponse({ message: "Pitch deck has no readable content" }, 400);
           }
 
-          const detailedAnalysis = await generateDetailedAnalysis(deck.extractedText);
+          const detailedAnalysis = await runDueDiligencePipeline(
+            deck.extractedText,
+            startup.name,
+            startup.industry,
+          );
 
           const [updated] = await db
             .update(startups)

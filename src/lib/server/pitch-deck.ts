@@ -1,4 +1,5 @@
 import { getOpenAIClient } from "./openai";
+import { answerQuestionWithWebSearch } from "./agents/researchAgent";
 import type { DetailedAnalysis, ImprovementSuggestion, PitchDeckAnalysis } from "./db/schema";
 
 export async function extractPdfText(buffer: Buffer): Promise<string> {
@@ -73,50 +74,6 @@ export async function analyzePitchDeckText(text: string): Promise<PitchDeckAnaly
   return parsed;
 }
 
-const DETAILED_ANALYSIS_SYSTEM_PROMPT = `You are a senior venture capital due-diligence analyst.
-Analyze the provided pitch deck content and return a comprehensive, structured JSON assessment
-that an investor could use to evaluate the investment opportunity. Be honest, specific, and base
-everything only on the content provided — do not invent facts.
-
-Return JSON matching exactly this shape:
-{
-  "investmentReadinessScore": number (0-100),
-  "recommendation": string (2-3 sentence investment recommendation),
-  "swot": {
-    "strengths": string[] (3-5 items),
-    "weaknesses": string[] (3-5 items),
-    "opportunities": string[] (3-5 items),
-    "threats": string[] (3-5 items)
-  },
-  "businessModelAnalysis": string (2-4 sentences),
-  "marketOpportunity": string (2-4 sentences, mention TAM/SAM/SOM if inferable),
-  "competitorAnalysis": string (2-4 sentences),
-  "riskAnalysis": string[] (3-5 concise risk bullet points),
-  "financialAnalysis": string (2-4 sentences),
-  "growthPotential": string (2-4 sentences)
-}`;
-
-export async function generateDetailedAnalysis(text: string): Promise<DetailedAnalysis> {
-  const openai = getOpenAIClient();
-  const truncated = text.length > 40000 ? text.slice(0, 40000) : text;
-
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: DETAILED_ANALYSIS_SYSTEM_PROMPT },
-      { role: "user", content: `Pitch deck content:\n\n${truncated}` },
-    ],
-    response_format: { type: "json_object" },
-  });
-
-  const content = response.choices[0]?.message?.content;
-  if (!content) {
-    throw new Error("No analysis content returned from AI");
-  }
-
-  return JSON.parse(content) as DetailedAnalysis;
-}
-
 const IMPROVEMENT_SYSTEM_PROMPT = `You are an expert pitch deck coach who helps startup founders improve their pitch decks
 before sending them to investors. Analyze the provided pitch deck content and identify concrete gaps,
 weaknesses, and opportunities to strengthen the deck (for example: missing TAM/market sizing, missing
@@ -185,21 +142,6 @@ Return JSON matching exactly this shape:
   "suggestedQuestions": string[] (2-3 short follow-up questions)
 }`;
 
-const WEB_SEARCH_CHAT_SYSTEM_PROMPT = `You are an AI assistant helping an investor evaluate a startup.
-The investor asked a question that requires up-to-date, real-world information (e.g. current competitors,
-latest funding news, industry trends, or current market conditions) that cannot be answered from the pitch
-deck alone. Use the web search tool to find current, relevant information, and combine it with the pitch
-deck content below where relevant. Cite what you found from the web in plain language (e.g. "According to
-recent reports..."). Keep the answer concise (2-5 sentences) and specific. Do not fabricate facts.
-
-After answering, think of 2-3 short, specific follow-up questions the investor could naturally ask next.
-
-Respond with ONLY a single JSON object (no markdown, no code fences) matching exactly this shape:
-{
-  "answer": string,
-  "suggestedQuestions": string[] (2-3 short follow-up questions)
-}`;
-
 const NEEDS_WEB_SEARCH_KEYWORDS = [
   "competitor",
   "competitors",
@@ -251,61 +193,16 @@ async function answerWithWebSearch(
   question: string,
   startupName?: string,
 ): Promise<ChatAnswer> {
-  const openai = getOpenAIClient();
-
-  const historyText = history
-    .map((h) => `${h.role === "user" ? "Investor" : "Assistant"}: ${h.content}`)
-    .join("\n");
-
-  const input = `${WEB_SEARCH_CHAT_SYSTEM_PROMPT}
-
-Startup: ${startupName ?? "the startup"}
-
-Pitch deck content:
-
-${content}
-
-${historyText ? `Conversation so far:\n${historyText}\n` : ""}
-Investor's question: ${question}`;
-
-  try {
-    const response = await openai.responses.create({
-      model: "gpt-4o-mini",
-      tools: [{ type: "web_search_preview" }],
-      input,
-    });
-
-    const raw = response.output_text?.trim();
-    if (!raw) {
-      return {
-        answer: "I couldn't find current information to answer that. Please try rephrasing.",
-        sourcePages: [],
-        suggestedQuestions: [],
-        usedWebSearch: true,
-      };
-    }
-
-    const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      try {
-        const parsed = JSON.parse(jsonMatch[0]) as Partial<ChatAnswer>;
-        return {
-          answer: parsed.answer ?? raw,
-          sourcePages: [],
-          suggestedQuestions: Array.isArray(parsed.suggestedQuestions)
-            ? parsed.suggestedQuestions
-            : [],
-          usedWebSearch: true,
-        };
-      } catch {
-        // fall through to raw text below
-      }
-    }
-    return { answer: raw, sourcePages: [], suggestedQuestions: [], usedWebSearch: true };
-  } catch (error) {
-    console.error("Web search chat error, falling back to RAG-only:", error);
+  const result = await answerQuestionWithWebSearch(content, history, question, startupName);
+  if (!result) {
     return answerFromPitchDeckOnly(content, history, question);
   }
+  return {
+    answer: result.answer,
+    sourcePages: [],
+    suggestedQuestions: result.suggestedQuestions,
+    usedWebSearch: true,
+  };
 }
 
 async function answerFromPitchDeckOnly(
