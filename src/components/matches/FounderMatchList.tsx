@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Users, Loader2, ArrowUpRight, Briefcase } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { Users, Loader2, ArrowUpRight, Briefcase, MessageSquare } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { FounderProfileSetup } from "@/components/profile/FounderProfileSetup";
 import { stageLabel } from "@/lib/constants";
 import type { InvestorMatch } from "@/lib/server/matching";
@@ -22,6 +24,7 @@ function scoreBadgeVariant(score: number) {
 
 export function FounderMatchList() {
   const [setupOpen, setSetupOpen] = useState(false);
+  const navigate = useNavigate();
   const { data, isLoading } = useQuery({ queryKey: ["/api/matches"], queryFn: fetchMatches });
 
   if (isLoading) {

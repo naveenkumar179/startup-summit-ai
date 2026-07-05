@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SelectRoleRouteImport } from './routes/select-role'
+import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as InvestorDashboardRouteImport } from './routes/investor/dashboard'
 import { Route as FounderDashboardRouteImport } from './routes/founder/dashboard'
@@ -18,15 +19,22 @@ import { Route as ApiLogoutRouteImport } from './routes/api/logout'
 import { Route as ApiLoginRouteImport } from './routes/api/login'
 import { Route as ApiCallbackRouteImport } from './routes/api/callback'
 import { Route as ApiPitchDeckIndexRouteImport } from './routes/api/pitch-deck/index'
+import { Route as ApiConversationsIndexRouteImport } from './routes/api/conversations/index'
 import { Route as ApiPitchDeckUploadRouteImport } from './routes/api/pitch-deck/upload'
 import { Route as ApiInvestorProfileRouteImport } from './routes/api/investor/profile'
 import { Route as ApiFounderProfileRouteImport } from './routes/api/founder/profile'
 import { Route as ApiAuthUserRouteImport } from './routes/api/auth/user'
 import { Route as ApiAuthRoleRouteImport } from './routes/api/auth/role'
+import { Route as ApiConversationsIdMessagesRouteImport } from './routes/api/conversations/$id/messages'
 
 const SelectRoleRoute = SelectRoleRouteImport.update({
   id: '/select-role',
   path: '/select-role',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MessagesRoute = MessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -69,6 +77,11 @@ const ApiPitchDeckIndexRoute = ApiPitchDeckIndexRouteImport.update({
   path: '/api/pitch-deck/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiConversationsIndexRoute = ApiConversationsIndexRouteImport.update({
+  id: '/api/conversations/',
+  path: '/api/conversations/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPitchDeckUploadRoute = ApiPitchDeckUploadRouteImport.update({
   id: '/api/pitch-deck/upload',
   path: '/api/pitch-deck/upload',
@@ -94,9 +107,16 @@ const ApiAuthRoleRoute = ApiAuthRoleRouteImport.update({
   path: '/api/auth/role',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiConversationsIdMessagesRoute =
+  ApiConversationsIdMessagesRouteImport.update({
+    id: '/api/conversations/$id/messages',
+    path: '/api/conversations/$id/messages',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/messages': typeof MessagesRoute
   '/select-role': typeof SelectRoleRoute
   '/api/callback': typeof ApiCallbackRoute
   '/api/login': typeof ApiLoginRoute
@@ -109,10 +129,13 @@ export interface FileRoutesByFullPath {
   '/api/founder/profile': typeof ApiFounderProfileRoute
   '/api/investor/profile': typeof ApiInvestorProfileRoute
   '/api/pitch-deck/upload': typeof ApiPitchDeckUploadRoute
+  '/api/conversations/': typeof ApiConversationsIndexRoute
   '/api/pitch-deck/': typeof ApiPitchDeckIndexRoute
+  '/api/conversations/$id/messages': typeof ApiConversationsIdMessagesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/messages': typeof MessagesRoute
   '/select-role': typeof SelectRoleRoute
   '/api/callback': typeof ApiCallbackRoute
   '/api/login': typeof ApiLoginRoute
@@ -125,11 +148,14 @@ export interface FileRoutesByTo {
   '/api/founder/profile': typeof ApiFounderProfileRoute
   '/api/investor/profile': typeof ApiInvestorProfileRoute
   '/api/pitch-deck/upload': typeof ApiPitchDeckUploadRoute
+  '/api/conversations': typeof ApiConversationsIndexRoute
   '/api/pitch-deck': typeof ApiPitchDeckIndexRoute
+  '/api/conversations/$id/messages': typeof ApiConversationsIdMessagesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/messages': typeof MessagesRoute
   '/select-role': typeof SelectRoleRoute
   '/api/callback': typeof ApiCallbackRoute
   '/api/login': typeof ApiLoginRoute
@@ -142,12 +168,15 @@ export interface FileRoutesById {
   '/api/founder/profile': typeof ApiFounderProfileRoute
   '/api/investor/profile': typeof ApiInvestorProfileRoute
   '/api/pitch-deck/upload': typeof ApiPitchDeckUploadRoute
+  '/api/conversations/': typeof ApiConversationsIndexRoute
   '/api/pitch-deck/': typeof ApiPitchDeckIndexRoute
+  '/api/conversations/$id/messages': typeof ApiConversationsIdMessagesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/messages'
     | '/select-role'
     | '/api/callback'
     | '/api/login'
@@ -160,10 +189,13 @@ export interface FileRouteTypes {
     | '/api/founder/profile'
     | '/api/investor/profile'
     | '/api/pitch-deck/upload'
+    | '/api/conversations/'
     | '/api/pitch-deck/'
+    | '/api/conversations/$id/messages'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/messages'
     | '/select-role'
     | '/api/callback'
     | '/api/login'
@@ -176,10 +208,13 @@ export interface FileRouteTypes {
     | '/api/founder/profile'
     | '/api/investor/profile'
     | '/api/pitch-deck/upload'
+    | '/api/conversations'
     | '/api/pitch-deck'
+    | '/api/conversations/$id/messages'
   id:
     | '__root__'
     | '/'
+    | '/messages'
     | '/select-role'
     | '/api/callback'
     | '/api/login'
@@ -192,11 +227,14 @@ export interface FileRouteTypes {
     | '/api/founder/profile'
     | '/api/investor/profile'
     | '/api/pitch-deck/upload'
+    | '/api/conversations/'
     | '/api/pitch-deck/'
+    | '/api/conversations/$id/messages'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MessagesRoute: typeof MessagesRoute
   SelectRoleRoute: typeof SelectRoleRoute
   ApiCallbackRoute: typeof ApiCallbackRoute
   ApiLoginRoute: typeof ApiLoginRoute
@@ -209,7 +247,9 @@ export interface RootRouteChildren {
   ApiFounderProfileRoute: typeof ApiFounderProfileRoute
   ApiInvestorProfileRoute: typeof ApiInvestorProfileRoute
   ApiPitchDeckUploadRoute: typeof ApiPitchDeckUploadRoute
+  ApiConversationsIndexRoute: typeof ApiConversationsIndexRoute
   ApiPitchDeckIndexRoute: typeof ApiPitchDeckIndexRoute
+  ApiConversationsIdMessagesRoute: typeof ApiConversationsIdMessagesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -219,6 +259,13 @@ declare module '@tanstack/react-router' {
       path: '/select-role'
       fullPath: '/select-role'
       preLoaderRoute: typeof SelectRoleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/messages': {
+      id: '/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof MessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -277,6 +324,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPitchDeckIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/conversations/': {
+      id: '/api/conversations/'
+      path: '/api/conversations'
+      fullPath: '/api/conversations/'
+      preLoaderRoute: typeof ApiConversationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/pitch-deck/upload': {
       id: '/api/pitch-deck/upload'
       path: '/api/pitch-deck/upload'
@@ -312,11 +366,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthRoleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/conversations/$id/messages': {
+      id: '/api/conversations/$id/messages'
+      path: '/api/conversations/$id/messages'
+      fullPath: '/api/conversations/$id/messages'
+      preLoaderRoute: typeof ApiConversationsIdMessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MessagesRoute: MessagesRoute,
   SelectRoleRoute: SelectRoleRoute,
   ApiCallbackRoute: ApiCallbackRoute,
   ApiLoginRoute: ApiLoginRoute,
@@ -329,7 +391,9 @@ const rootRouteChildren: RootRouteChildren = {
   ApiFounderProfileRoute: ApiFounderProfileRoute,
   ApiInvestorProfileRoute: ApiInvestorProfileRoute,
   ApiPitchDeckUploadRoute: ApiPitchDeckUploadRoute,
+  ApiConversationsIndexRoute: ApiConversationsIndexRoute,
   ApiPitchDeckIndexRoute: ApiPitchDeckIndexRoute,
+  ApiConversationsIdMessagesRoute: ApiConversationsIdMessagesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

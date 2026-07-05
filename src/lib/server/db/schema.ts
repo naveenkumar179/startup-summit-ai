@@ -103,3 +103,46 @@ export const investorProfiles = pgTable("investor_profiles", {
 
 export type InvestorProfile = typeof investorProfiles.$inferSelect;
 export type InsertInvestorProfile = typeof investorProfiles.$inferInsert;
+
+export const conversations = pgTable(
+  "conversations",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    founderId: varchar("founder_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    investorId: varchar("investor_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (table) => [
+    index("IDX_conversations_founder").on(table.founderId),
+    index("IDX_conversations_investor").on(table.investorId),
+    index("IDX_conversations_pair").on(table.founderId, table.investorId),
+  ]
+);
+
+export type Conversation = typeof conversations.$inferSelect;
+export type InsertConversation = typeof conversations.$inferInsert;
+
+export const messages = pgTable(
+  "messages",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    conversationId: varchar("conversation_id")
+      .notNull()
+      .references(() => conversations.id, { onDelete: "cascade" }),
+    senderId: varchar("sender_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    content: text("content").notNull(),
+    readAt: timestamp("read_at"),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (table) => [index("IDX_messages_conversation").on(table.conversationId)]
+);
+
+export type Message = typeof messages.$inferSelect;
+export type InsertMessage = typeof messages.$inferInsert;
