@@ -14,3 +14,9 @@ the standard OpenAI SDK client with `apiKey: process.env.OPENAI_API_KEY` (no cus
 
 **How to apply:** if new AI features are added later, reuse the existing `OPENAI_API_KEY` secret
 and `getOpenAIClient()` helper rather than re-adding the AI Integrations blueprint.
+
+**Key validation gotcha:** when a 429 `insufficient_quota` error prompts asking the user for a
+fresh key, they may paste a key from the wrong provider (e.g. a Google key starting `AIzaSy...`)
+without noticing. OpenAI keys start with `sk-`. After `requestEnvVar` returns, restart the workflow
+and check the next AI call's logs for a 401 `invalid_api_key` — if seen, re-request and explicitly
+tell the user their key doesn't match OpenAI's format before they paste again.
