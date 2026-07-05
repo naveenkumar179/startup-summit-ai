@@ -43,8 +43,13 @@ export const Route = createFileRoute("/api/startups/$id/chat")({
             return jsonResponse({ message: "Question is required" }, 400);
           }
 
-          const answer = await answerPitchDeckQuestion(deck.extractedText, body.history ?? [], question);
-          return jsonResponse({ answer });
+          const result = await answerPitchDeckQuestion(
+            deck.extractedText,
+            deck.pageTexts,
+            body.history ?? [],
+            question,
+          );
+          return jsonResponse(result);
         } catch (error) {
           if (error instanceof Response) return error;
           console.error("Pitch deck chat error:", error);

@@ -3,7 +3,7 @@ import { requireUser } from "@/lib/server/auth";
 import { db } from "@/lib/server/db";
 import { pitchDecks } from "@/lib/server/db/schema";
 import { eq } from "drizzle-orm";
-import { extractPdfText, analyzePitchDeckText } from "@/lib/server/pitch-deck";
+import { extractPdfText, extractPdfPages, analyzePitchDeckText } from "@/lib/server/pitch-deck";
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -54,12 +54,20 @@ export const Route = createFileRoute("/api/pitch-deck/upload")({
             );
           }
 
+          let pageTexts: string[] = [];
+          try {
+            pageTexts = await extractPdfPages(buffer);
+          } catch (err) {
+            console.error("PDF page extraction error:", err);
+          }
+
           const [deck] = await db
             .insert(pitchDecks)
             .values({
               userId: user.id,
               fileName: file.name,
               extractedText,
+              pageTexts: pageTexts.length > 0 ? pageTexts : null,
               status: "processing",
             })
             .returning();

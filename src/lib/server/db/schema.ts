@@ -39,6 +39,7 @@ export const pitchDecks = pgTable(
       .references(() => users.id, { onDelete: "cascade" }),
     fileName: varchar("file_name").notNull(),
     extractedText: text("extracted_text"),
+    pageTexts: jsonb("page_texts").$type<string[]>(),
     status: pitchDeckStatusEnum("status").notNull().default("processing"),
     analysis: jsonb("analysis").$type<PitchDeckAnalysis>(),
     errorMessage: text("error_message"),
@@ -168,6 +169,8 @@ export type DetailedAnalysis = {
 
 export type ImprovementSuggestion = {
   area: string;
+  category: "missing_section" | "weak_content" | "best_practice";
+  priority: "high" | "medium" | "low";
   issue: string;
   suggestion: string;
   example: string;

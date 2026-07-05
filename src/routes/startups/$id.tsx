@@ -30,7 +30,13 @@ export const Route = createFileRoute("/startups/$id")({
   component: StartupDetailsPage,
 });
 
-type StartupDetailResponse = { startup: Startup; deck: PitchDeck | null; isOwner: boolean; isWatchlisted: boolean };
+type StartupDetailResponse = {
+  startup: Startup;
+  deck: PitchDeck | null;
+  isOwner: boolean;
+  isWatchlisted: boolean;
+  match: { score: number; reasons: string[] } | null;
+};
 
 function StartupDetailsPage() {
   const { id } = Route.useParams();
@@ -204,6 +210,56 @@ function StartupDetailsPage() {
               </div>
             </div>
           </div>
+
+          {user?.role === "investor" && data.match && (
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+              <div className="rounded-2xl border border-border bg-card p-6 lg:col-span-1">
+                <h3 className="mb-3 font-semibold text-foreground">AI Match Score</h3>
+                <div className="flex flex-col items-center">
+                  <div className="relative flex h-24 w-24 items-center justify-center">
+                    <svg className="h-24 w-24 -rotate-90" viewBox="0 0 96 96">
+                      <circle cx="48" cy="48" r="40" fill="none" stroke="currentColor" strokeWidth="8" className="text-muted" />
+                      <circle
+                        cx="48"
+                        cy="48"
+                        r="40"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="8"
+                        strokeLinecap="round"
+                        strokeDasharray={2 * Math.PI * 40}
+                        strokeDashoffset={2 * Math.PI * 40 - (data.match.score / 100) * (2 * Math.PI * 40)}
+                        className="text-success"
+                      />
+                    </svg>
+                    <span className="absolute text-xl font-bold text-foreground">{data.match.score}%</span>
+                  </div>
+                  <p className="mt-2 text-sm font-semibold text-success">
+                    {data.match.score >= 80
+                      ? "Excellent Match"
+                      : data.match.score >= 55
+                        ? "Good Match"
+                        : "Limited Match"}
+                  </p>
+                  <p className="mt-1 text-center text-xs text-muted-foreground">
+                    This startup matches your investment preferences{" "}
+                    {data.match.score >= 80 ? "very well" : data.match.score >= 55 ? "reasonably well" : "loosely"}.
+                  </p>
+                </div>
+                <h4 className="mb-2 mt-5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  Top Reasons
+                </h4>
+                <ul className="space-y-1.5">
+                  {data.match.reasons.map((r, i) => (
+                    <li key={i} className="flex items-start gap-1.5 text-sm text-muted-foreground">
+                      <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-success" />
+                      {r}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <div className="space-y-6 lg:col-span-2">

@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { and, eq } from "drizzle-orm";
 import { requireUser } from "@/lib/server/auth";
 import { db } from "@/lib/server/db";
-import { pitchDecks, startups, startupStageEnum, watchlist } from "@/lib/server/db/schema";
+import { investorProfiles, pitchDecks, startups, startupStageEnum, watchlist } from "@/lib/server/db/schema";
+import { scoreStartupForInvestor } from "@/lib/server/matching";
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -34,15 +35,24 @@ export const Route = createFileRoute("/api/startups/$id")({
             : [null];
 
           let isWatchlisted = false;
+          let match: { score: number; reasons: string[] } | null = null;
           if (user.role === "investor") {
             const [item] = await db
               .select()
               .from(watchlist)
               .where(and(eq(watchlist.investorId, user.id), eq(watchlist.startupId, startup.id)));
             isWatchlisted = !!item;
+
+            const [investorProfile] = await db
+              .select()
+              .from(investorProfiles)
+              .where(eq(investorProfiles.userId, user.id));
+            if (investorProfile) {
+              match = scoreStartupForInvestor(startup, deck ?? null, investorProfile);
+            }
           }
 
-          return jsonResponse({ startup, deck: deck ?? null, isOwner, isWatchlisted });
+          return jsonResponse({ startup, deck: deck ?? null, isOwner, isWatchlisted, match });
         } catch (error) {
           if (error instanceof Response) return error;
           console.error("Get startup error:", error);

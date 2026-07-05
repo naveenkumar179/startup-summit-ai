@@ -74,6 +74,52 @@ export function scoreFounderForInvestor(
   return { score: Math.min(100, score), reasons };
 }
 
+export function scoreStartupForInvestor(
+  startup: { industry: string; stage: string },
+  deck: PitchDeck | null,
+  investorProfile: InvestorProfile,
+): { score: number; reasons: string[] } {
+  let score = 0;
+  const reasons: string[] = [];
+
+  const industryMatch = investorProfile.industries.some(
+    (i) => i.toLowerCase() === startup.industry.toLowerCase(),
+  );
+  if (industryMatch) {
+    score += 45;
+    reasons.push(`Strong industry match in ${startup.industry}`);
+  } else if (investorProfile.industries.length === 0) {
+    score += 15;
+  }
+
+  const stageMatch = investorProfile.stagePreferences.includes(
+    startup.stage as InvestorProfile["stagePreferences"][number],
+  );
+  if (stageMatch) {
+    score += 30;
+    reasons.push(`Matches your preferred stage: ${stageLabel(startup.stage)}`);
+  } else if (investorProfile.stagePreferences.length === 0) {
+    score += 10;
+  }
+
+  if (deck?.status === "analyzed" && deck.analysis) {
+    const pitchBonus = Math.round((deck.analysis.overallScore / 100) * 25);
+    score += pitchBonus;
+    if (deck.analysis.overallScore >= 70) {
+      reasons.push(`Strong pitch deck quality (${deck.analysis.overallScore}/100)`);
+    }
+    if (deck.analysis.strengths.length > 0) {
+      reasons.push(deck.analysis.strengths[0]);
+    }
+  }
+
+  if (reasons.length === 0) {
+    reasons.push("Limited overlap with your stated investment preferences");
+  }
+
+  return { score: Math.min(100, score), reasons: reasons.slice(0, 4) };
+}
+
 export function buildFounderMatches(
   founders: { user: User; profile: FounderProfile; deck: PitchDeck | null }[],
   investorProfile: InvestorProfile,
