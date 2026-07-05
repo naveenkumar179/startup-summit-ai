@@ -144,7 +144,9 @@ Return between 4 and 9 suggestions, ordered by priority (high first). Use "missi
 standard section is entirely absent, "weak_content" when a section exists but needs strengthening, and
 "best_practice" for general tips that would elevate an already-present section.`;
 
-export async function generateImprovementSuggestions(text: string): Promise<ImprovementSuggestion[]> {
+export async function generateImprovementSuggestions(
+  text: string,
+): Promise<ImprovementSuggestion[]> {
   const openai = getOpenAIClient();
   const truncated = text.length > 40000 ? text.slice(0, 40000) : text;
 
@@ -183,27 +185,135 @@ Return JSON matching exactly this shape:
   "suggestedQuestions": string[] (2-3 short follow-up questions)
 }`;
 
+const WEB_SEARCH_CHAT_SYSTEM_PROMPT = `You are an AI assistant helping an investor evaluate a startup.
+The investor asked a question that requires up-to-date, real-world information (e.g. current competitors,
+latest funding news, industry trends, or current market conditions) that cannot be answered from the pitch
+deck alone. Use the web search tool to find current, relevant information, and combine it with the pitch
+deck content below where relevant. Cite what you found from the web in plain language (e.g. "According to
+recent reports..."). Keep the answer concise (2-5 sentences) and specific. Do not fabricate facts.
+
+After answering, think of 2-3 short, specific follow-up questions the investor could naturally ask next.
+
+Respond with ONLY a single JSON object (no markdown, no code fences) matching exactly this shape:
+{
+  "answer": string,
+  "suggestedQuestions": string[] (2-3 short follow-up questions)
+}`;
+
+const NEEDS_WEB_SEARCH_KEYWORDS = [
+  "competitor",
+  "competitors",
+  "competition",
+  "latest",
+  "recent",
+  "current",
+  "currently",
+  "today",
+  "now",
+  "trend",
+  "trends",
+  "industry",
+  "market condition",
+  "funding round",
+  "raised funding",
+  "news",
+  "valuation",
+  "this year",
+  "202",
+];
+
+function questionNeedsWebSearch(question: string): boolean {
+  const lower = question.toLowerCase();
+  return NEEDS_WEB_SEARCH_KEYWORDS.some((kw) => lower.includes(kw));
+}
+
 export type ChatAnswer = {
   answer: string;
   sourcePages: number[];
   suggestedQuestions: string[];
+  usedWebSearch?: boolean;
 };
 
-export async function answerPitchDeckQuestion(
+function buildPitchDeckContent(
   pitchDeckText: string,
   pageTexts: string[] | null | undefined,
+): string {
+  if (pageTexts && pageTexts.length > 0) {
+    const tagged = pageTexts.map((text, i) => `[[PAGE ${i + 1}]]\n${text}`).join("\n\n");
+    return tagged.length > 40000 ? tagged.slice(0, 40000) : tagged;
+  }
+  return pitchDeckText.length > 40000 ? pitchDeckText.slice(0, 40000) : pitchDeckText;
+}
+
+async function answerWithWebSearch(
+  content: string,
+  history: { role: "user" | "assistant"; content: string }[],
+  question: string,
+  startupName?: string,
+): Promise<ChatAnswer> {
+  const openai = getOpenAIClient();
+
+  const historyText = history
+    .map((h) => `${h.role === "user" ? "Investor" : "Assistant"}: ${h.content}`)
+    .join("\n");
+
+  const input = `${WEB_SEARCH_CHAT_SYSTEM_PROMPT}
+
+Startup: ${startupName ?? "the startup"}
+
+Pitch deck content:
+
+${content}
+
+${historyText ? `Conversation so far:\n${historyText}\n` : ""}
+Investor's question: ${question}`;
+
+  try {
+    const response = await openai.responses.create({
+      model: "gpt-4o-mini",
+      tools: [{ type: "web_search_preview" }],
+      input,
+    });
+
+    const raw = response.output_text?.trim();
+    if (!raw) {
+      return {
+        answer: "I couldn't find current information to answer that. Please try rephrasing.",
+        sourcePages: [],
+        suggestedQuestions: [],
+        usedWebSearch: true,
+      };
+    }
+
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      try {
+        const parsed = JSON.parse(jsonMatch[0]) as Partial<ChatAnswer>;
+        return {
+          answer: parsed.answer ?? raw,
+          sourcePages: [],
+          suggestedQuestions: Array.isArray(parsed.suggestedQuestions)
+            ? parsed.suggestedQuestions
+            : [],
+          usedWebSearch: true,
+        };
+      } catch {
+        // fall through to raw text below
+      }
+    }
+    return { answer: raw, sourcePages: [], suggestedQuestions: [], usedWebSearch: true };
+  } catch (error) {
+    console.error("Web search chat error, falling back to RAG-only:", error);
+    return answerFromPitchDeckOnly(content, history, question);
+  }
+}
+
+async function answerFromPitchDeckOnly(
+  content: string,
   history: { role: "user" | "assistant"; content: string }[],
   question: string,
 ): Promise<ChatAnswer> {
   const openai = getOpenAIClient();
-
-  let content: string;
-  if (pageTexts && pageTexts.length > 0) {
-    const tagged = pageTexts.map((text, i) => `[[PAGE ${i + 1}]]\n${text}`).join("\n\n");
-    content = tagged.length > 40000 ? tagged.slice(0, 40000) : tagged;
-  } else {
-    content = pitchDeckText.length > 40000 ? pitchDeckText.slice(0, 40000) : pitchDeckText;
-  }
 
   const response = await openai.chat.completions.create({
     model: "gpt-4o-mini",
@@ -217,7 +327,11 @@ export async function answerPitchDeckQuestion(
 
   const raw = response.choices[0]?.message?.content;
   if (!raw) {
-    return { answer: "I couldn't generate a response. Please try again.", sourcePages: [], suggestedQuestions: [] };
+    return {
+      answer: "I couldn't generate a response. Please try again.",
+      sourcePages: [],
+      suggestedQuestions: [],
+    };
   }
 
   try {
@@ -230,4 +344,19 @@ export async function answerPitchDeckQuestion(
   } catch {
     return { answer: raw, sourcePages: [], suggestedQuestions: [] };
   }
+}
+
+export async function answerPitchDeckQuestion(
+  pitchDeckText: string,
+  pageTexts: string[] | null | undefined,
+  history: { role: "user" | "assistant"; content: string }[],
+  question: string,
+  startupName?: string,
+): Promise<ChatAnswer> {
+  const content = buildPitchDeckContent(pitchDeckText, pageTexts);
+
+  if (questionNeedsWebSearch(question)) {
+    return answerWithWebSearch(content, history, question, startupName);
+  }
+  return answerFromPitchDeckOnly(content, history, question);
 }

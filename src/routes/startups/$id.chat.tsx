@@ -1,7 +1,16 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Send, Loader2, Bot, User as UserIcon, FileText, Sparkles, Trash2 } from "lucide-react";
+import {
+  Send,
+  Loader2,
+  Bot,
+  User as UserIcon,
+  FileText,
+  Sparkles,
+  Trash2,
+  Globe,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
@@ -17,6 +26,7 @@ type ChatMessage = {
   role: "user" | "assistant";
   content: string;
   sourcePages?: number[];
+  usedWebSearch?: boolean;
 };
 
 function StartupChatPage() {
@@ -38,7 +48,7 @@ function StartupChatPage() {
     if (!hasRole) {
       navigate({ to: "/select-role" });
     }
-  }, [isLoading, isAuthenticated, hasRole]);
+  }, [isLoading, isAuthenticated, hasRole, navigate]);
 
   const { data: detail } = useQuery({
     queryKey: ["/api/startups", id],
@@ -62,12 +72,22 @@ function StartupChatPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message ?? "Failed to get an answer");
-      return data as { answer: string; sourcePages: number[]; suggestedQuestions: string[] };
+      return data as {
+        answer: string;
+        sourcePages: number[];
+        suggestedQuestions: string[];
+        usedWebSearch?: boolean;
+      };
     },
     onSuccess: (result) => {
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: result.answer, sourcePages: result.sourcePages },
+        {
+          role: "assistant",
+          content: result.answer,
+          sourcePages: result.sourcePages,
+          usedWebSearch: result.usedWebSearch,
+        },
       ]);
       setSuggestedQuestions(result.suggestedQuestions ?? []);
       setTimeout(() => scrollRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
@@ -104,7 +124,8 @@ function StartupChatPage() {
     );
   }
 
-  const sidebarItems = user?.role === "investor" ? investorSidebar("discover") : founderSidebar("startups");
+  const sidebarItems =
+    user?.role === "investor" ? investorSidebar("discover") : founderSidebar("startups");
 
   return (
     <DashboardLayout items={sidebarItems} title={`AI Chat — ${detail?.startup?.name ?? ""}`}>
@@ -112,7 +133,9 @@ function StartupChatPage() {
         <div className="flex h-[70vh] flex-col rounded-2xl border border-border bg-card">
           <div className="flex items-center justify-between border-b border-border p-4">
             <div>
-              <h3 className="font-semibold text-foreground">AI Chat with {detail?.startup?.name ?? "startup"}</h3>
+              <h3 className="font-semibold text-foreground">
+                AI Chat with {detail?.startup?.name ?? "startup"}
+              </h3>
               <p className="text-xs text-muted-foreground">
                 Ask anything about this startup's idea, business, market, or traction.
               </p>
@@ -127,11 +150,15 @@ function StartupChatPage() {
           <div className="flex-1 space-y-4 overflow-y-auto p-6">
             {messages.length === 0 && (
               <div className="text-center text-sm text-muted-foreground">
-                Ask anything about this startup's pitch deck — the AI will answer using its contents.
+                Ask anything about this startup's pitch deck — the AI will answer using its
+                contents.
               </div>
             )}
             {messages.map((m, i) => (
-              <div key={i} className={`flex gap-3 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+              <div
+                key={i}
+                className={`flex gap-3 ${m.role === "user" ? "justify-end" : "justify-start"}`}
+              >
                 {m.role === "assistant" && (
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent">
                     <Bot className="h-4 w-4 text-primary" />
@@ -140,23 +167,31 @@ function StartupChatPage() {
                 <div className="max-w-[75%]">
                   <div
                     className={`rounded-2xl px-4 py-2.5 text-sm ${
-                      m.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                      m.role === "user"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-foreground"
                     }`}
                   >
                     {m.content}
                   </div>
-                  {m.role === "assistant" && m.sourcePages && m.sourcePages.length > 0 && (
-                    <div className="mt-1.5 flex flex-wrap gap-1">
-                      {m.sourcePages.map((p) => (
-                        <span
-                          key={p}
-                          className="inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-[11px] text-muted-foreground"
-                        >
-                          <FileText className="h-3 w-3" /> Slide {p}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                  {m.role === "assistant" &&
+                    ((m.sourcePages && m.sourcePages.length > 0) || m.usedWebSearch) && (
+                      <div className="mt-1.5 flex flex-wrap gap-1">
+                        {m.sourcePages?.map((p) => (
+                          <span
+                            key={p}
+                            className="inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-[11px] text-muted-foreground"
+                          >
+                            <FileText className="h-3 w-3" /> Slide {p}
+                          </span>
+                        ))}
+                        {m.usedWebSearch && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/10 px-2 py-0.5 text-[11px] text-blue-600 dark:text-blue-400">
+                            <Globe className="h-3 w-3" /> Web search
+                          </span>
+                        )}
+                      </div>
+                    )}
                 </div>
                 {m.role === "user" && (
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted">

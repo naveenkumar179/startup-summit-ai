@@ -29,7 +29,10 @@ export const Route = createFileRoute("/api/startups/$id/chat")({
             return jsonResponse({ message: "This startup has no pitch deck uploaded yet" }, 400);
           }
 
-          const [deck] = await db.select().from(pitchDecks).where(eq(pitchDecks.id, startup.pitchDeckId));
+          const [deck] = await db
+            .select()
+            .from(pitchDecks)
+            .where(eq(pitchDecks.id, startup.pitchDeckId));
           if (!deck?.extractedText) {
             return jsonResponse({ message: "Pitch deck has no readable content" }, 400);
           }
@@ -48,6 +51,7 @@ export const Route = createFileRoute("/api/startups/$id/chat")({
             deck.pageTexts,
             body.history ?? [],
             question,
+            startup.name,
           );
           return jsonResponse(result);
         } catch (error) {
