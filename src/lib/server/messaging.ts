@@ -4,7 +4,7 @@ import { conversations, messages, users, type User } from "./db/schema";
 
 export async function getOrCreateConversation(
   founderId: string,
-  investorId: string
+  investorId: string,
 ): Promise<typeof conversations.$inferSelect> {
   const [existing] = await db
     .select()
@@ -29,7 +29,10 @@ export async function getOrCreateConversation(
   return fallback;
 }
 
-export function isParticipant(conversation: { founderId: string; investorId: string }, userId: string) {
+export function isParticipant(
+  conversation: { founderId: string; investorId: string },
+  userId: string,
+) {
   return conversation.founderId === userId || conversation.investorId === userId;
 }
 
@@ -37,12 +40,19 @@ export async function listConversationsForUser(userId: string, role: string) {
   const rows = await db
     .select()
     .from(conversations)
-    .where(role === "founder" ? eq(conversations.founderId, userId) : eq(conversations.investorId, userId))
+    .where(
+      role === "founder"
+        ? eq(conversations.founderId, userId)
+        : eq(conversations.investorId, userId),
+    )
     .orderBy(desc(conversations.updatedAt));
 
   const otherIds = rows.map((c) => (role === "founder" ? c.investorId : c.founderId));
   const others = otherIds.length
-    ? await db.select().from(users).where(or(...otherIds.map((id) => eq(users.id, id))))
+    ? await db
+        .select()
+        .from(users)
+        .where(or(...otherIds.map((id) => eq(users.id, id))))
     : [];
   const otherById = new Map<string, User>(others.map((u) => [u.id, u]));
 
@@ -53,8 +63,8 @@ export async function listConversationsForUser(userId: string, role: string) {
         .from(messages)
         .where(eq(messages.conversationId, c.id))
         .orderBy(desc(messages.createdAt))
-        .limit(1)
-    )
+        .limit(1),
+    ),
   );
 
   return rows.map((c, i) => ({

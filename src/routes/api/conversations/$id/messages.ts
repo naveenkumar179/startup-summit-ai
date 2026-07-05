@@ -1,6 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { requireUser } from "@/lib/server/auth";
-import { getConversationById, isParticipant, listMessages, sendMessage } from "@/lib/server/messaging";
+import {
+  getConversationById,
+  isParticipant,
+  listMessages,
+  sendMessage,
+} from "@/lib/server/messaging";
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
