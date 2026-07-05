@@ -31,54 +31,54 @@ export function Hero() {
       {/* Subtle purple decoration */}
       <div
         aria-hidden
-        className="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full opacity-40 blur-3xl"
+        className="absolute -top-32 -right-32 h-[420px] w-[420px] rounded-full opacity-40 blur-3xl"
         style={{ background: "radial-gradient(circle, oklch(0.85 0.12 290) 0%, transparent 70%)" }}
       />
 
-      <div className="relative mx-auto max-w-7xl px-6 py-16 lg:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div className="relative mx-auto max-w-7xl px-6 py-10 lg:py-14">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center">
           {/* Left */}
           <div>
-            <h1 className="text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.05]">
+            <h1 className="text-3xl lg:text-[2.75rem] font-bold tracking-tight text-foreground leading-[1.15]">
               Connect. Pitch. Invest.
               <br />
               Build the future together.
             </h1>
-            <p className="mt-6 text-lg text-muted-foreground max-w-xl leading-relaxed">
+            <p className="mt-4 text-base text-muted-foreground max-w-xl leading-relaxed">
               StartupBridge is an AI-powered platform that connects innovative
               startups with the right investors.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-4">
+            <div className="mt-6 flex flex-wrap gap-3">
               <a
                 href="/api/login"
-                className="group flex items-center gap-4 rounded-xl bg-primary px-6 py-4 text-primary-foreground shadow-[var(--shadow-glow)] hover:bg-primary/90 transition"
+                className="group flex items-center gap-3 rounded-xl bg-primary px-5 py-3 text-primary-foreground shadow-[var(--shadow-glow)] hover:bg-primary/90 transition"
               >
                 <div className="text-left">
-                  <div className="text-base font-semibold">I'm a Founder</div>
+                  <div className="text-sm font-semibold">I'm a Founder</div>
                   <div className="text-xs opacity-90">Share your idea</div>
                 </div>
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
 
               <a
                 href="/api/login"
-                className="group flex items-center gap-4 rounded-xl border border-border bg-card px-6 py-4 text-foreground hover:border-primary/40 hover:bg-accent transition"
+                className="group flex items-center gap-3 rounded-xl border border-border bg-card px-5 py-3 text-foreground hover:border-primary/40 hover:bg-accent transition"
               >
                 <div className="text-left">
-                  <div className="text-base font-semibold">I'm an Investor</div>
+                  <div className="text-sm font-semibold">I'm an Investor</div>
                   <div className="text-xs text-muted-foreground">Discover startups</div>
                 </div>
-                <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
               </a>
             </div>
 
             {/* Feature strip */}
-            <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-5">
               {features.map((f) => (
-                <div key={f.title} className="flex items-start gap-3">
-                  <div className={`h-10 w-10 rounded-lg ${f.bg} flex items-center justify-center shrink-0`}>
-                    <f.icon className={`h-5 w-5 ${f.color}`} />
+                <div key={f.title} className="flex items-start gap-2.5">
+                  <div className={`h-9 w-9 rounded-lg ${f.bg} flex items-center justify-center shrink-0`}>
+                    <f.icon className={`h-4.5 w-4.5 ${f.color}`} />
                   </div>
                   <div>
                     <h3 className="text-sm font-semibold text-foreground">{f.title}</h3>

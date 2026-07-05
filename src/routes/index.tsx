@@ -54,7 +54,7 @@ function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div id="top" className="min-h-screen scroll-smooth bg-background">
       <Navbar />
       <Hero />
       <StartupsSection />

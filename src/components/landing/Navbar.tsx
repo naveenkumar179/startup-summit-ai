@@ -10,6 +10,7 @@ import {
 import { BrandMark } from "./BrandMark";
 
 const links = [
+  { label: "Home", href: "#top" },
   { label: "Startups", href: "#startups" },
   { label: "Investors", href: "#investors" },
   { label: "How it Works", href: "#how-it-works" },
@@ -32,7 +33,11 @@ export function Navbar() {
             <a
               key={l.label}
               href={l.href}
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className={`text-sm transition-colors ${
+                l.label === "Home"
+                  ? "text-primary font-medium"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
               {l.label}
             </a>
