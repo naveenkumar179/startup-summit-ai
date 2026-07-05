@@ -2,18 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import {
-  LayoutDashboard,
-  FileText,
-  MessageSquare,
   Users,
-  BarChart3,
-  Settings,
   Sparkles,
   TrendingUp,
   Eye,
-  ArrowUpRight,
+  MessageSquare,
 } from "lucide-react";
-import { DashboardLayout, type SidebarItem } from "@/components/dashboard/DashboardLayout";
+import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { founderSidebar } from "@/components/dashboard/sidebars";
 import { PitchDeckUpload } from "@/components/pitch-deck/PitchDeckUpload";
 import { FounderMatchList } from "@/components/matches/FounderMatchList";
 import { useAuth } from "@/hooks/use-auth";
@@ -22,14 +18,7 @@ export const Route = createFileRoute("/founder/dashboard")({
   component: FounderDashboard,
 });
 
-const sidebarItems: SidebarItem[] = [
-  { label: "Dashboard", icon: LayoutDashboard, to: "/founder/dashboard", active: true },
-  { label: "Pitch Deck", icon: FileText },
-  { label: "AI Chat", icon: MessageSquare },
-  { label: "Investors", icon: Users },
-  { label: "Analytics", icon: BarChart3 },
-  { label: "Settings", icon: Settings },
-];
+const sidebarItems = founderSidebar("dashboard");
 
 const stats = [
   { label: "Profile Views", value: "0", icon: Eye, color: "text-primary", bg: "bg-accent" },

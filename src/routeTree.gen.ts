@@ -9,24 +9,52 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SelectRoleRouteImport } from './routes/select-role'
 import { Route as MessagesRouteImport } from './routes/messages'
+import { Route as MeetingsRouteImport } from './routes/meetings'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StartupsIdRouteImport } from './routes/startups/$id'
+import { Route as InvestorWatchlistRouteImport } from './routes/investor/watchlist'
+import { Route as InvestorPortfolioRouteImport } from './routes/investor/portfolio'
+import { Route as InvestorDiscoverRouteImport } from './routes/investor/discover'
 import { Route as InvestorDashboardRouteImport } from './routes/investor/dashboard'
 import { Route as FounderDashboardRouteImport } from './routes/founder/dashboard'
 import { Route as ApiMatchesRouteImport } from './routes/api/matches'
 import { Route as ApiLogoutRouteImport } from './routes/api/logout'
 import { Route as ApiLoginRouteImport } from './routes/api/login'
 import { Route as ApiCallbackRouteImport } from './routes/api/callback'
+import { Route as FounderStartupsIndexRouteImport } from './routes/founder/startups/index'
+import { Route as ApiWatchlistIndexRouteImport } from './routes/api/watchlist/index'
+import { Route as ApiStartupsIndexRouteImport } from './routes/api/startups/index'
 import { Route as ApiPitchDeckIndexRouteImport } from './routes/api/pitch-deck/index'
+import { Route as ApiMeetingsIndexRouteImport } from './routes/api/meetings/index'
 import { Route as ApiConversationsIndexRouteImport } from './routes/api/conversations/index'
+import { Route as StartupsIdDueDiligenceRouteImport } from './routes/startups/$id.due-diligence'
+import { Route as StartupsIdChatRouteImport } from './routes/startups/$id.chat'
+import { Route as FounderStartupsNewRouteImport } from './routes/founder/startups/new'
+import { Route as ApiWatchlistIdRouteImport } from './routes/api/watchlist/$id'
+import { Route as ApiStartupsDiscoverRouteImport } from './routes/api/startups/discover'
+import { Route as ApiStartupsIdRouteImport } from './routes/api/startups/$id'
+import { Route as ApiSettingsProfileRouteImport } from './routes/api/settings/profile'
 import { Route as ApiPitchDeckUploadRouteImport } from './routes/api/pitch-deck/upload'
+import { Route as ApiMeetingsIdRouteImport } from './routes/api/meetings/$id'
 import { Route as ApiInvestorProfileRouteImport } from './routes/api/investor/profile'
 import { Route as ApiFounderProfileRouteImport } from './routes/api/founder/profile'
 import { Route as ApiAuthUserRouteImport } from './routes/api/auth/user'
 import { Route as ApiAuthRoleRouteImport } from './routes/api/auth/role'
+import { Route as FounderStartupsIdImproveRouteImport } from './routes/founder/startups/$id.improve'
+import { Route as FounderStartupsIdEditRouteImport } from './routes/founder/startups/$id.edit'
+import { Route as ApiStartupsIdImproveRouteImport } from './routes/api/startups/$id/improve'
+import { Route as ApiStartupsIdChatRouteImport } from './routes/api/startups/$id/chat'
+import { Route as ApiStartupsIdAnalyzeRouteImport } from './routes/api/startups/$id/analyze'
 import { Route as ApiConversationsIdMessagesRouteImport } from './routes/api/conversations/$id/messages'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SelectRoleRoute = SelectRoleRouteImport.update({
   id: '/select-role',
   path: '/select-role',
@@ -37,9 +65,34 @@ const MessagesRoute = MessagesRouteImport.update({
   path: '/messages',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MeetingsRoute = MeetingsRouteImport.update({
+  id: '/meetings',
+  path: '/meetings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StartupsIdRoute = StartupsIdRouteImport.update({
+  id: '/startups/$id',
+  path: '/startups/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvestorWatchlistRoute = InvestorWatchlistRouteImport.update({
+  id: '/investor/watchlist',
+  path: '/investor/watchlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvestorPortfolioRoute = InvestorPortfolioRouteImport.update({
+  id: '/investor/portfolio',
+  path: '/investor/portfolio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvestorDiscoverRoute = InvestorDiscoverRouteImport.update({
+  id: '/investor/discover',
+  path: '/investor/discover',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InvestorDashboardRoute = InvestorDashboardRouteImport.update({
@@ -72,9 +125,29 @@ const ApiCallbackRoute = ApiCallbackRouteImport.update({
   path: '/api/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FounderStartupsIndexRoute = FounderStartupsIndexRouteImport.update({
+  id: '/founder/startups/',
+  path: '/founder/startups/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWatchlistIndexRoute = ApiWatchlistIndexRouteImport.update({
+  id: '/api/watchlist/',
+  path: '/api/watchlist/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStartupsIndexRoute = ApiStartupsIndexRouteImport.update({
+  id: '/api/startups/',
+  path: '/api/startups/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPitchDeckIndexRoute = ApiPitchDeckIndexRouteImport.update({
   id: '/api/pitch-deck/',
   path: '/api/pitch-deck/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMeetingsIndexRoute = ApiMeetingsIndexRouteImport.update({
+  id: '/api/meetings/',
+  path: '/api/meetings/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiConversationsIndexRoute = ApiConversationsIndexRouteImport.update({
@@ -82,9 +155,49 @@ const ApiConversationsIndexRoute = ApiConversationsIndexRouteImport.update({
   path: '/api/conversations/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StartupsIdDueDiligenceRoute = StartupsIdDueDiligenceRouteImport.update({
+  id: '/due-diligence',
+  path: '/due-diligence',
+  getParentRoute: () => StartupsIdRoute,
+} as any)
+const StartupsIdChatRoute = StartupsIdChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => StartupsIdRoute,
+} as any)
+const FounderStartupsNewRoute = FounderStartupsNewRouteImport.update({
+  id: '/founder/startups/new',
+  path: '/founder/startups/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWatchlistIdRoute = ApiWatchlistIdRouteImport.update({
+  id: '/api/watchlist/$id',
+  path: '/api/watchlist/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStartupsDiscoverRoute = ApiStartupsDiscoverRouteImport.update({
+  id: '/api/startups/discover',
+  path: '/api/startups/discover',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStartupsIdRoute = ApiStartupsIdRouteImport.update({
+  id: '/api/startups/$id',
+  path: '/api/startups/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSettingsProfileRoute = ApiSettingsProfileRouteImport.update({
+  id: '/api/settings/profile',
+  path: '/api/settings/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPitchDeckUploadRoute = ApiPitchDeckUploadRouteImport.update({
   id: '/api/pitch-deck/upload',
   path: '/api/pitch-deck/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMeetingsIdRoute = ApiMeetingsIdRouteImport.update({
+  id: '/api/meetings/$id',
+  path: '/api/meetings/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiInvestorProfileRoute = ApiInvestorProfileRouteImport.update({
@@ -107,6 +220,32 @@ const ApiAuthRoleRoute = ApiAuthRoleRouteImport.update({
   path: '/api/auth/role',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FounderStartupsIdImproveRoute =
+  FounderStartupsIdImproveRouteImport.update({
+    id: '/founder/startups/$id/improve',
+    path: '/founder/startups/$id/improve',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const FounderStartupsIdEditRoute = FounderStartupsIdEditRouteImport.update({
+  id: '/founder/startups/$id/edit',
+  path: '/founder/startups/$id/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStartupsIdImproveRoute = ApiStartupsIdImproveRouteImport.update({
+  id: '/improve',
+  path: '/improve',
+  getParentRoute: () => ApiStartupsIdRoute,
+} as any)
+const ApiStartupsIdChatRoute = ApiStartupsIdChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => ApiStartupsIdRoute,
+} as any)
+const ApiStartupsIdAnalyzeRoute = ApiStartupsIdAnalyzeRouteImport.update({
+  id: '/analyze',
+  path: '/analyze',
+  getParentRoute: () => ApiStartupsIdRoute,
+} as any)
 const ApiConversationsIdMessagesRoute =
   ApiConversationsIdMessagesRouteImport.update({
     id: '/api/conversations/$id/messages',
@@ -116,144 +255,307 @@ const ApiConversationsIdMessagesRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/meetings': typeof MeetingsRoute
   '/messages': typeof MessagesRoute
   '/select-role': typeof SelectRoleRoute
+  '/settings': typeof SettingsRoute
   '/api/callback': typeof ApiCallbackRoute
   '/api/login': typeof ApiLoginRoute
   '/api/logout': typeof ApiLogoutRoute
   '/api/matches': typeof ApiMatchesRoute
   '/founder/dashboard': typeof FounderDashboardRoute
   '/investor/dashboard': typeof InvestorDashboardRoute
+  '/investor/discover': typeof InvestorDiscoverRoute
+  '/investor/portfolio': typeof InvestorPortfolioRoute
+  '/investor/watchlist': typeof InvestorWatchlistRoute
+  '/startups/$id': typeof StartupsIdRouteWithChildren
   '/api/auth/role': typeof ApiAuthRoleRoute
   '/api/auth/user': typeof ApiAuthUserRoute
   '/api/founder/profile': typeof ApiFounderProfileRoute
   '/api/investor/profile': typeof ApiInvestorProfileRoute
+  '/api/meetings/$id': typeof ApiMeetingsIdRoute
   '/api/pitch-deck/upload': typeof ApiPitchDeckUploadRoute
+  '/api/settings/profile': typeof ApiSettingsProfileRoute
+  '/api/startups/$id': typeof ApiStartupsIdRouteWithChildren
+  '/api/startups/discover': typeof ApiStartupsDiscoverRoute
+  '/api/watchlist/$id': typeof ApiWatchlistIdRoute
+  '/founder/startups/new': typeof FounderStartupsNewRoute
+  '/startups/$id/chat': typeof StartupsIdChatRoute
+  '/startups/$id/due-diligence': typeof StartupsIdDueDiligenceRoute
   '/api/conversations/': typeof ApiConversationsIndexRoute
+  '/api/meetings/': typeof ApiMeetingsIndexRoute
   '/api/pitch-deck/': typeof ApiPitchDeckIndexRoute
+  '/api/startups/': typeof ApiStartupsIndexRoute
+  '/api/watchlist/': typeof ApiWatchlistIndexRoute
+  '/founder/startups/': typeof FounderStartupsIndexRoute
   '/api/conversations/$id/messages': typeof ApiConversationsIdMessagesRoute
+  '/api/startups/$id/analyze': typeof ApiStartupsIdAnalyzeRoute
+  '/api/startups/$id/chat': typeof ApiStartupsIdChatRoute
+  '/api/startups/$id/improve': typeof ApiStartupsIdImproveRoute
+  '/founder/startups/$id/edit': typeof FounderStartupsIdEditRoute
+  '/founder/startups/$id/improve': typeof FounderStartupsIdImproveRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/meetings': typeof MeetingsRoute
   '/messages': typeof MessagesRoute
   '/select-role': typeof SelectRoleRoute
+  '/settings': typeof SettingsRoute
   '/api/callback': typeof ApiCallbackRoute
   '/api/login': typeof ApiLoginRoute
   '/api/logout': typeof ApiLogoutRoute
   '/api/matches': typeof ApiMatchesRoute
   '/founder/dashboard': typeof FounderDashboardRoute
   '/investor/dashboard': typeof InvestorDashboardRoute
+  '/investor/discover': typeof InvestorDiscoverRoute
+  '/investor/portfolio': typeof InvestorPortfolioRoute
+  '/investor/watchlist': typeof InvestorWatchlistRoute
+  '/startups/$id': typeof StartupsIdRouteWithChildren
   '/api/auth/role': typeof ApiAuthRoleRoute
   '/api/auth/user': typeof ApiAuthUserRoute
   '/api/founder/profile': typeof ApiFounderProfileRoute
   '/api/investor/profile': typeof ApiInvestorProfileRoute
+  '/api/meetings/$id': typeof ApiMeetingsIdRoute
   '/api/pitch-deck/upload': typeof ApiPitchDeckUploadRoute
+  '/api/settings/profile': typeof ApiSettingsProfileRoute
+  '/api/startups/$id': typeof ApiStartupsIdRouteWithChildren
+  '/api/startups/discover': typeof ApiStartupsDiscoverRoute
+  '/api/watchlist/$id': typeof ApiWatchlistIdRoute
+  '/founder/startups/new': typeof FounderStartupsNewRoute
+  '/startups/$id/chat': typeof StartupsIdChatRoute
+  '/startups/$id/due-diligence': typeof StartupsIdDueDiligenceRoute
   '/api/conversations': typeof ApiConversationsIndexRoute
+  '/api/meetings': typeof ApiMeetingsIndexRoute
   '/api/pitch-deck': typeof ApiPitchDeckIndexRoute
+  '/api/startups': typeof ApiStartupsIndexRoute
+  '/api/watchlist': typeof ApiWatchlistIndexRoute
+  '/founder/startups': typeof FounderStartupsIndexRoute
   '/api/conversations/$id/messages': typeof ApiConversationsIdMessagesRoute
+  '/api/startups/$id/analyze': typeof ApiStartupsIdAnalyzeRoute
+  '/api/startups/$id/chat': typeof ApiStartupsIdChatRoute
+  '/api/startups/$id/improve': typeof ApiStartupsIdImproveRoute
+  '/founder/startups/$id/edit': typeof FounderStartupsIdEditRoute
+  '/founder/startups/$id/improve': typeof FounderStartupsIdImproveRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/meetings': typeof MeetingsRoute
   '/messages': typeof MessagesRoute
   '/select-role': typeof SelectRoleRoute
+  '/settings': typeof SettingsRoute
   '/api/callback': typeof ApiCallbackRoute
   '/api/login': typeof ApiLoginRoute
   '/api/logout': typeof ApiLogoutRoute
   '/api/matches': typeof ApiMatchesRoute
   '/founder/dashboard': typeof FounderDashboardRoute
   '/investor/dashboard': typeof InvestorDashboardRoute
+  '/investor/discover': typeof InvestorDiscoverRoute
+  '/investor/portfolio': typeof InvestorPortfolioRoute
+  '/investor/watchlist': typeof InvestorWatchlistRoute
+  '/startups/$id': typeof StartupsIdRouteWithChildren
   '/api/auth/role': typeof ApiAuthRoleRoute
   '/api/auth/user': typeof ApiAuthUserRoute
   '/api/founder/profile': typeof ApiFounderProfileRoute
   '/api/investor/profile': typeof ApiInvestorProfileRoute
+  '/api/meetings/$id': typeof ApiMeetingsIdRoute
   '/api/pitch-deck/upload': typeof ApiPitchDeckUploadRoute
+  '/api/settings/profile': typeof ApiSettingsProfileRoute
+  '/api/startups/$id': typeof ApiStartupsIdRouteWithChildren
+  '/api/startups/discover': typeof ApiStartupsDiscoverRoute
+  '/api/watchlist/$id': typeof ApiWatchlistIdRoute
+  '/founder/startups/new': typeof FounderStartupsNewRoute
+  '/startups/$id/chat': typeof StartupsIdChatRoute
+  '/startups/$id/due-diligence': typeof StartupsIdDueDiligenceRoute
   '/api/conversations/': typeof ApiConversationsIndexRoute
+  '/api/meetings/': typeof ApiMeetingsIndexRoute
   '/api/pitch-deck/': typeof ApiPitchDeckIndexRoute
+  '/api/startups/': typeof ApiStartupsIndexRoute
+  '/api/watchlist/': typeof ApiWatchlistIndexRoute
+  '/founder/startups/': typeof FounderStartupsIndexRoute
   '/api/conversations/$id/messages': typeof ApiConversationsIdMessagesRoute
+  '/api/startups/$id/analyze': typeof ApiStartupsIdAnalyzeRoute
+  '/api/startups/$id/chat': typeof ApiStartupsIdChatRoute
+  '/api/startups/$id/improve': typeof ApiStartupsIdImproveRoute
+  '/founder/startups/$id/edit': typeof FounderStartupsIdEditRoute
+  '/founder/startups/$id/improve': typeof FounderStartupsIdImproveRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/meetings'
     | '/messages'
     | '/select-role'
+    | '/settings'
     | '/api/callback'
     | '/api/login'
     | '/api/logout'
     | '/api/matches'
     | '/founder/dashboard'
     | '/investor/dashboard'
+    | '/investor/discover'
+    | '/investor/portfolio'
+    | '/investor/watchlist'
+    | '/startups/$id'
     | '/api/auth/role'
     | '/api/auth/user'
     | '/api/founder/profile'
     | '/api/investor/profile'
+    | '/api/meetings/$id'
     | '/api/pitch-deck/upload'
+    | '/api/settings/profile'
+    | '/api/startups/$id'
+    | '/api/startups/discover'
+    | '/api/watchlist/$id'
+    | '/founder/startups/new'
+    | '/startups/$id/chat'
+    | '/startups/$id/due-diligence'
     | '/api/conversations/'
+    | '/api/meetings/'
     | '/api/pitch-deck/'
+    | '/api/startups/'
+    | '/api/watchlist/'
+    | '/founder/startups/'
     | '/api/conversations/$id/messages'
+    | '/api/startups/$id/analyze'
+    | '/api/startups/$id/chat'
+    | '/api/startups/$id/improve'
+    | '/founder/startups/$id/edit'
+    | '/founder/startups/$id/improve'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/meetings'
     | '/messages'
     | '/select-role'
+    | '/settings'
     | '/api/callback'
     | '/api/login'
     | '/api/logout'
     | '/api/matches'
     | '/founder/dashboard'
     | '/investor/dashboard'
+    | '/investor/discover'
+    | '/investor/portfolio'
+    | '/investor/watchlist'
+    | '/startups/$id'
     | '/api/auth/role'
     | '/api/auth/user'
     | '/api/founder/profile'
     | '/api/investor/profile'
+    | '/api/meetings/$id'
     | '/api/pitch-deck/upload'
+    | '/api/settings/profile'
+    | '/api/startups/$id'
+    | '/api/startups/discover'
+    | '/api/watchlist/$id'
+    | '/founder/startups/new'
+    | '/startups/$id/chat'
+    | '/startups/$id/due-diligence'
     | '/api/conversations'
+    | '/api/meetings'
     | '/api/pitch-deck'
+    | '/api/startups'
+    | '/api/watchlist'
+    | '/founder/startups'
     | '/api/conversations/$id/messages'
+    | '/api/startups/$id/analyze'
+    | '/api/startups/$id/chat'
+    | '/api/startups/$id/improve'
+    | '/founder/startups/$id/edit'
+    | '/founder/startups/$id/improve'
   id:
     | '__root__'
     | '/'
+    | '/meetings'
     | '/messages'
     | '/select-role'
+    | '/settings'
     | '/api/callback'
     | '/api/login'
     | '/api/logout'
     | '/api/matches'
     | '/founder/dashboard'
     | '/investor/dashboard'
+    | '/investor/discover'
+    | '/investor/portfolio'
+    | '/investor/watchlist'
+    | '/startups/$id'
     | '/api/auth/role'
     | '/api/auth/user'
     | '/api/founder/profile'
     | '/api/investor/profile'
+    | '/api/meetings/$id'
     | '/api/pitch-deck/upload'
+    | '/api/settings/profile'
+    | '/api/startups/$id'
+    | '/api/startups/discover'
+    | '/api/watchlist/$id'
+    | '/founder/startups/new'
+    | '/startups/$id/chat'
+    | '/startups/$id/due-diligence'
     | '/api/conversations/'
+    | '/api/meetings/'
     | '/api/pitch-deck/'
+    | '/api/startups/'
+    | '/api/watchlist/'
+    | '/founder/startups/'
     | '/api/conversations/$id/messages'
+    | '/api/startups/$id/analyze'
+    | '/api/startups/$id/chat'
+    | '/api/startups/$id/improve'
+    | '/founder/startups/$id/edit'
+    | '/founder/startups/$id/improve'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MeetingsRoute: typeof MeetingsRoute
   MessagesRoute: typeof MessagesRoute
   SelectRoleRoute: typeof SelectRoleRoute
+  SettingsRoute: typeof SettingsRoute
   ApiCallbackRoute: typeof ApiCallbackRoute
   ApiLoginRoute: typeof ApiLoginRoute
   ApiLogoutRoute: typeof ApiLogoutRoute
   ApiMatchesRoute: typeof ApiMatchesRoute
   FounderDashboardRoute: typeof FounderDashboardRoute
   InvestorDashboardRoute: typeof InvestorDashboardRoute
+  InvestorDiscoverRoute: typeof InvestorDiscoverRoute
+  InvestorPortfolioRoute: typeof InvestorPortfolioRoute
+  InvestorWatchlistRoute: typeof InvestorWatchlistRoute
+  StartupsIdRoute: typeof StartupsIdRouteWithChildren
   ApiAuthRoleRoute: typeof ApiAuthRoleRoute
   ApiAuthUserRoute: typeof ApiAuthUserRoute
   ApiFounderProfileRoute: typeof ApiFounderProfileRoute
   ApiInvestorProfileRoute: typeof ApiInvestorProfileRoute
+  ApiMeetingsIdRoute: typeof ApiMeetingsIdRoute
   ApiPitchDeckUploadRoute: typeof ApiPitchDeckUploadRoute
+  ApiSettingsProfileRoute: typeof ApiSettingsProfileRoute
+  ApiStartupsIdRoute: typeof ApiStartupsIdRouteWithChildren
+  ApiStartupsDiscoverRoute: typeof ApiStartupsDiscoverRoute
+  ApiWatchlistIdRoute: typeof ApiWatchlistIdRoute
+  FounderStartupsNewRoute: typeof FounderStartupsNewRoute
   ApiConversationsIndexRoute: typeof ApiConversationsIndexRoute
+  ApiMeetingsIndexRoute: typeof ApiMeetingsIndexRoute
   ApiPitchDeckIndexRoute: typeof ApiPitchDeckIndexRoute
+  ApiStartupsIndexRoute: typeof ApiStartupsIndexRoute
+  ApiWatchlistIndexRoute: typeof ApiWatchlistIndexRoute
+  FounderStartupsIndexRoute: typeof FounderStartupsIndexRoute
   ApiConversationsIdMessagesRoute: typeof ApiConversationsIdMessagesRoute
+  FounderStartupsIdEditRoute: typeof FounderStartupsIdEditRoute
+  FounderStartupsIdImproveRoute: typeof FounderStartupsIdImproveRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/select-role': {
       id: '/select-role'
       path: '/select-role'
@@ -268,11 +570,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/meetings': {
+      id: '/meetings'
+      path: '/meetings'
+      fullPath: '/meetings'
+      preLoaderRoute: typeof MeetingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/startups/$id': {
+      id: '/startups/$id'
+      path: '/startups/$id'
+      fullPath: '/startups/$id'
+      preLoaderRoute: typeof StartupsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/investor/watchlist': {
+      id: '/investor/watchlist'
+      path: '/investor/watchlist'
+      fullPath: '/investor/watchlist'
+      preLoaderRoute: typeof InvestorWatchlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/investor/portfolio': {
+      id: '/investor/portfolio'
+      path: '/investor/portfolio'
+      fullPath: '/investor/portfolio'
+      preLoaderRoute: typeof InvestorPortfolioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/investor/discover': {
+      id: '/investor/discover'
+      path: '/investor/discover'
+      fullPath: '/investor/discover'
+      preLoaderRoute: typeof InvestorDiscoverRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/investor/dashboard': {
@@ -317,11 +654,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/founder/startups/': {
+      id: '/founder/startups/'
+      path: '/founder/startups'
+      fullPath: '/founder/startups/'
+      preLoaderRoute: typeof FounderStartupsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/watchlist/': {
+      id: '/api/watchlist/'
+      path: '/api/watchlist'
+      fullPath: '/api/watchlist/'
+      preLoaderRoute: typeof ApiWatchlistIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/startups/': {
+      id: '/api/startups/'
+      path: '/api/startups'
+      fullPath: '/api/startups/'
+      preLoaderRoute: typeof ApiStartupsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/pitch-deck/': {
       id: '/api/pitch-deck/'
       path: '/api/pitch-deck'
       fullPath: '/api/pitch-deck/'
       preLoaderRoute: typeof ApiPitchDeckIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/meetings/': {
+      id: '/api/meetings/'
+      path: '/api/meetings'
+      fullPath: '/api/meetings/'
+      preLoaderRoute: typeof ApiMeetingsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/conversations/': {
@@ -331,11 +696,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiConversationsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/startups/$id/due-diligence': {
+      id: '/startups/$id/due-diligence'
+      path: '/due-diligence'
+      fullPath: '/startups/$id/due-diligence'
+      preLoaderRoute: typeof StartupsIdDueDiligenceRouteImport
+      parentRoute: typeof StartupsIdRoute
+    }
+    '/startups/$id/chat': {
+      id: '/startups/$id/chat'
+      path: '/chat'
+      fullPath: '/startups/$id/chat'
+      preLoaderRoute: typeof StartupsIdChatRouteImport
+      parentRoute: typeof StartupsIdRoute
+    }
+    '/founder/startups/new': {
+      id: '/founder/startups/new'
+      path: '/founder/startups/new'
+      fullPath: '/founder/startups/new'
+      preLoaderRoute: typeof FounderStartupsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/watchlist/$id': {
+      id: '/api/watchlist/$id'
+      path: '/api/watchlist/$id'
+      fullPath: '/api/watchlist/$id'
+      preLoaderRoute: typeof ApiWatchlistIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/startups/discover': {
+      id: '/api/startups/discover'
+      path: '/api/startups/discover'
+      fullPath: '/api/startups/discover'
+      preLoaderRoute: typeof ApiStartupsDiscoverRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/startups/$id': {
+      id: '/api/startups/$id'
+      path: '/api/startups/$id'
+      fullPath: '/api/startups/$id'
+      preLoaderRoute: typeof ApiStartupsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/settings/profile': {
+      id: '/api/settings/profile'
+      path: '/api/settings/profile'
+      fullPath: '/api/settings/profile'
+      preLoaderRoute: typeof ApiSettingsProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/pitch-deck/upload': {
       id: '/api/pitch-deck/upload'
       path: '/api/pitch-deck/upload'
       fullPath: '/api/pitch-deck/upload'
       preLoaderRoute: typeof ApiPitchDeckUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/meetings/$id': {
+      id: '/api/meetings/$id'
+      path: '/api/meetings/$id'
+      fullPath: '/api/meetings/$id'
+      preLoaderRoute: typeof ApiMeetingsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/investor/profile': {
@@ -366,6 +787,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthRoleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/founder/startups/$id/improve': {
+      id: '/founder/startups/$id/improve'
+      path: '/founder/startups/$id/improve'
+      fullPath: '/founder/startups/$id/improve'
+      preLoaderRoute: typeof FounderStartupsIdImproveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/founder/startups/$id/edit': {
+      id: '/founder/startups/$id/edit'
+      path: '/founder/startups/$id/edit'
+      fullPath: '/founder/startups/$id/edit'
+      preLoaderRoute: typeof FounderStartupsIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/startups/$id/improve': {
+      id: '/api/startups/$id/improve'
+      path: '/improve'
+      fullPath: '/api/startups/$id/improve'
+      preLoaderRoute: typeof ApiStartupsIdImproveRouteImport
+      parentRoute: typeof ApiStartupsIdRoute
+    }
+    '/api/startups/$id/chat': {
+      id: '/api/startups/$id/chat'
+      path: '/chat'
+      fullPath: '/api/startups/$id/chat'
+      preLoaderRoute: typeof ApiStartupsIdChatRouteImport
+      parentRoute: typeof ApiStartupsIdRoute
+    }
+    '/api/startups/$id/analyze': {
+      id: '/api/startups/$id/analyze'
+      path: '/analyze'
+      fullPath: '/api/startups/$id/analyze'
+      preLoaderRoute: typeof ApiStartupsIdAnalyzeRouteImport
+      parentRoute: typeof ApiStartupsIdRoute
+    }
     '/api/conversations/$id/messages': {
       id: '/api/conversations/$id/messages'
       path: '/api/conversations/$id/messages'
@@ -376,24 +832,72 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface StartupsIdRouteChildren {
+  StartupsIdChatRoute: typeof StartupsIdChatRoute
+  StartupsIdDueDiligenceRoute: typeof StartupsIdDueDiligenceRoute
+}
+
+const StartupsIdRouteChildren: StartupsIdRouteChildren = {
+  StartupsIdChatRoute: StartupsIdChatRoute,
+  StartupsIdDueDiligenceRoute: StartupsIdDueDiligenceRoute,
+}
+
+const StartupsIdRouteWithChildren = StartupsIdRoute._addFileChildren(
+  StartupsIdRouteChildren,
+)
+
+interface ApiStartupsIdRouteChildren {
+  ApiStartupsIdAnalyzeRoute: typeof ApiStartupsIdAnalyzeRoute
+  ApiStartupsIdChatRoute: typeof ApiStartupsIdChatRoute
+  ApiStartupsIdImproveRoute: typeof ApiStartupsIdImproveRoute
+}
+
+const ApiStartupsIdRouteChildren: ApiStartupsIdRouteChildren = {
+  ApiStartupsIdAnalyzeRoute: ApiStartupsIdAnalyzeRoute,
+  ApiStartupsIdChatRoute: ApiStartupsIdChatRoute,
+  ApiStartupsIdImproveRoute: ApiStartupsIdImproveRoute,
+}
+
+const ApiStartupsIdRouteWithChildren = ApiStartupsIdRoute._addFileChildren(
+  ApiStartupsIdRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MeetingsRoute: MeetingsRoute,
   MessagesRoute: MessagesRoute,
   SelectRoleRoute: SelectRoleRoute,
+  SettingsRoute: SettingsRoute,
   ApiCallbackRoute: ApiCallbackRoute,
   ApiLoginRoute: ApiLoginRoute,
   ApiLogoutRoute: ApiLogoutRoute,
   ApiMatchesRoute: ApiMatchesRoute,
   FounderDashboardRoute: FounderDashboardRoute,
   InvestorDashboardRoute: InvestorDashboardRoute,
+  InvestorDiscoverRoute: InvestorDiscoverRoute,
+  InvestorPortfolioRoute: InvestorPortfolioRoute,
+  InvestorWatchlistRoute: InvestorWatchlistRoute,
+  StartupsIdRoute: StartupsIdRouteWithChildren,
   ApiAuthRoleRoute: ApiAuthRoleRoute,
   ApiAuthUserRoute: ApiAuthUserRoute,
   ApiFounderProfileRoute: ApiFounderProfileRoute,
   ApiInvestorProfileRoute: ApiInvestorProfileRoute,
+  ApiMeetingsIdRoute: ApiMeetingsIdRoute,
   ApiPitchDeckUploadRoute: ApiPitchDeckUploadRoute,
+  ApiSettingsProfileRoute: ApiSettingsProfileRoute,
+  ApiStartupsIdRoute: ApiStartupsIdRouteWithChildren,
+  ApiStartupsDiscoverRoute: ApiStartupsDiscoverRoute,
+  ApiWatchlistIdRoute: ApiWatchlistIdRoute,
+  FounderStartupsNewRoute: FounderStartupsNewRoute,
   ApiConversationsIndexRoute: ApiConversationsIndexRoute,
+  ApiMeetingsIndexRoute: ApiMeetingsIndexRoute,
   ApiPitchDeckIndexRoute: ApiPitchDeckIndexRoute,
+  ApiStartupsIndexRoute: ApiStartupsIndexRoute,
+  ApiWatchlistIndexRoute: ApiWatchlistIndexRoute,
+  FounderStartupsIndexRoute: FounderStartupsIndexRoute,
   ApiConversationsIdMessagesRoute: ApiConversationsIdMessagesRoute,
+  FounderStartupsIdEditRoute: FounderStartupsIdEditRoute,
+  FounderStartupsIdImproveRoute: FounderStartupsIdImproveRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

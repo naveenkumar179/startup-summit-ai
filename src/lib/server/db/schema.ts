@@ -146,3 +146,116 @@ export const messages = pgTable(
 
 export type Message = typeof messages.$inferSelect;
 export type InsertMessage = typeof messages.$inferInsert;
+
+export const startupStatusEnum = pgEnum("startup_status", ["draft", "published"]);
+
+export type DetailedAnalysis = {
+  investmentReadinessScore: number;
+  recommendation: string;
+  swot: {
+    strengths: string[];
+    weaknesses: string[];
+    opportunities: string[];
+    threats: string[];
+  };
+  businessModelAnalysis: string;
+  marketOpportunity: string;
+  competitorAnalysis: string;
+  riskAnalysis: string[];
+  financialAnalysis: string;
+  growthPotential: string;
+};
+
+export type ImprovementSuggestion = {
+  area: string;
+  issue: string;
+  suggestion: string;
+  example: string;
+};
+
+export const startups = pgTable(
+  "startups",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    founderId: varchar("founder_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    name: varchar("name").notNull(),
+    tagline: varchar("tagline"),
+    industry: varchar("industry").notNull(),
+    description: text("description"),
+    businessModel: text("business_model"),
+    stage: startupStageEnum("stage").notNull().default("idea"),
+    fundingRequired: varchar("funding_required"),
+    location: varchar("location"),
+    website: varchar("website"),
+    foundingYear: varchar("founding_year"),
+    teamSize: varchar("team_size"),
+    revenue: varchar("revenue"),
+    customers: varchar("customers"),
+    logoUrl: text("logo_url"),
+    pitchDeckId: varchar("pitch_deck_id").references(() => pitchDecks.id, { onDelete: "set null" }),
+    status: startupStatusEnum("status").notNull().default("draft"),
+    detailedAnalysis: jsonb("detailed_analysis").$type<DetailedAnalysis>(),
+    improvementSuggestions: jsonb("improvement_suggestions").$type<ImprovementSuggestion[]>(),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (table) => [
+    index("IDX_startups_founder").on(table.founderId),
+    index("IDX_startups_status").on(table.status),
+  ]
+);
+
+export type Startup = typeof startups.$inferSelect;
+export type InsertStartup = typeof startups.$inferInsert;
+
+export const watchlist = pgTable(
+  "watchlist",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    investorId: varchar("investor_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    startupId: varchar("startup_id")
+      .notNull()
+      .references(() => startups.id, { onDelete: "cascade" }),
+    notes: text("notes"),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (table) => [
+    index("IDX_watchlist_investor").on(table.investorId),
+    index("IDX_watchlist_pair").on(table.investorId, table.startupId),
+  ]
+);
+
+export type WatchlistItem = typeof watchlist.$inferSelect;
+export type InsertWatchlistItem = typeof watchlist.$inferInsert;
+
+export const meetingStatusEnum = pgEnum("meeting_status", ["scheduled", "completed", "cancelled"]);
+
+export const meetings = pgTable(
+  "meetings",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    investorId: varchar("investor_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    founderId: varchar("founder_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    startupId: varchar("startup_id").references(() => startups.id, { onDelete: "set null" }),
+    title: varchar("title").notNull(),
+    scheduledAt: timestamp("scheduled_at").notNull(),
+    status: meetingStatusEnum("status").notNull().default("scheduled"),
+    notes: text("notes"),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (table) => [
+    index("IDX_meetings_investor").on(table.investorId),
+    index("IDX_meetings_founder").on(table.founderId),
+  ]
+);
+
+export type Meeting = typeof meetings.$inferSelect;
+export type InsertMeeting = typeof meetings.$inferInsert;

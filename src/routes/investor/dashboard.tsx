@@ -1,17 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import {
-  LayoutDashboard,
-  Search,
-  Rocket,
-  ShieldCheck,
-  BarChart3,
-  Settings,
-  Sparkles,
-  Bookmark,
-  MessageSquare,
-} from "lucide-react";
-import { DashboardLayout, type SidebarItem } from "@/components/dashboard/DashboardLayout";
+import { Rocket, ShieldCheck, Sparkles, Bookmark, MessageSquare } from "lucide-react";
+import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { investorSidebar } from "@/components/dashboard/sidebars";
 import { InvestorMatchList } from "@/components/matches/InvestorMatchList";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -19,15 +10,7 @@ export const Route = createFileRoute("/investor/dashboard")({
   component: InvestorDashboard,
 });
 
-const sidebarItems: SidebarItem[] = [
-  { label: "Dashboard", icon: LayoutDashboard, to: "/investor/dashboard", active: true },
-  { label: "Discover Startups", icon: Search },
-  { label: "Due Diligence", icon: ShieldCheck },
-  { label: "Saved Startups", icon: Bookmark },
-  { label: "Messages", icon: MessageSquare },
-  { label: "Analytics", icon: BarChart3 },
-  { label: "Settings", icon: Settings },
-];
+const sidebarItems = investorSidebar("dashboard");
 
 const stats = [
   { label: "Startups Reviewed", value: "0", icon: Rocket, color: "text-primary", bg: "bg-accent" },

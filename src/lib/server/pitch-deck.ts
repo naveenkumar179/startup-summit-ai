@@ -1,5 +1,5 @@
 import { getOpenAIClient } from "./openai";
-import type { PitchDeckAnalysis } from "./db/schema";
+import type { DetailedAnalysis, ImprovementSuggestion, PitchDeckAnalysis } from "./db/schema";
 
 export async function extractPdfText(buffer: Buffer): Promise<string> {
   const { PDFParse } = await import("pdf-parse");
@@ -54,4 +54,111 @@ export async function analyzePitchDeckText(text: string): Promise<PitchDeckAnaly
 
   const parsed = JSON.parse(content) as PitchDeckAnalysis;
   return parsed;
+}
+
+const DETAILED_ANALYSIS_SYSTEM_PROMPT = `You are a senior venture capital due-diligence analyst.
+Analyze the provided pitch deck content and return a comprehensive, structured JSON assessment
+that an investor could use to evaluate the investment opportunity. Be honest, specific, and base
+everything only on the content provided — do not invent facts.
+
+Return JSON matching exactly this shape:
+{
+  "investmentReadinessScore": number (0-100),
+  "recommendation": string (2-3 sentence investment recommendation),
+  "swot": {
+    "strengths": string[] (3-5 items),
+    "weaknesses": string[] (3-5 items),
+    "opportunities": string[] (3-5 items),
+    "threats": string[] (3-5 items)
+  },
+  "businessModelAnalysis": string (2-4 sentences),
+  "marketOpportunity": string (2-4 sentences, mention TAM/SAM/SOM if inferable),
+  "competitorAnalysis": string (2-4 sentences),
+  "riskAnalysis": string[] (3-5 concise risk bullet points),
+  "financialAnalysis": string (2-4 sentences),
+  "growthPotential": string (2-4 sentences)
+}`;
+
+export async function generateDetailedAnalysis(text: string): Promise<DetailedAnalysis> {
+  const openai = getOpenAIClient();
+  const truncated = text.length > 40000 ? text.slice(0, 40000) : text;
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      { role: "system", content: DETAILED_ANALYSIS_SYSTEM_PROMPT },
+      { role: "user", content: `Pitch deck content:\n\n${truncated}` },
+    ],
+    response_format: { type: "json_object" },
+  });
+
+  const content = response.choices[0]?.message?.content;
+  if (!content) {
+    throw new Error("No analysis content returned from AI");
+  }
+
+  return JSON.parse(content) as DetailedAnalysis;
+}
+
+const IMPROVEMENT_SYSTEM_PROMPT = `You are an expert pitch deck coach who helps startup founders improve their pitch decks
+before sending them to investors. Analyze the provided pitch deck content and identify concrete gaps
+or weaknesses (for example: missing TAM/market sizing, missing revenue model, weak traction evidence,
+weak team section, missing go-to-market strategy, missing financial projections, missing competitor slide).
+For each gap found, provide a specific suggestion and a short example of how to address it.
+Only flag issues that are actually present in the content — do not invent extra gaps if the deck is strong.
+
+Return JSON matching exactly this shape:
+{
+  "suggestions": [
+    { "area": string (e.g. "Market Sizing"), "issue": string, "suggestion": string, "example": string }
+  ]
+}
+Return between 3 and 8 suggestions, ordered by importance.`;
+
+export async function generateImprovementSuggestions(text: string): Promise<ImprovementSuggestion[]> {
+  const openai = getOpenAIClient();
+  const truncated = text.length > 40000 ? text.slice(0, 40000) : text;
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      { role: "system", content: IMPROVEMENT_SYSTEM_PROMPT },
+      { role: "user", content: `Pitch deck content:\n\n${truncated}` },
+    ],
+    response_format: { type: "json_object" },
+  });
+
+  const content = response.choices[0]?.message?.content;
+  if (!content) {
+    throw new Error("No suggestions content returned from AI");
+  }
+
+  const parsed = JSON.parse(content) as { suggestions: ImprovementSuggestion[] };
+  return parsed.suggestions;
+}
+
+const CHAT_SYSTEM_PROMPT = `You are an AI assistant helping an investor evaluate a startup.
+Answer the investor's question using ONLY the pitch deck content provided below as your source of truth.
+If the pitch deck does not contain enough information to answer, say so clearly and suggest the investor
+ask the founder directly — do not make up facts or numbers that are not in the content.
+Keep answers concise (2-5 sentences) and specific.`;
+
+export async function answerPitchDeckQuestion(
+  pitchDeckText: string,
+  history: { role: "user" | "assistant"; content: string }[],
+  question: string,
+): Promise<string> {
+  const openai = getOpenAIClient();
+  const truncated = pitchDeckText.length > 40000 ? pitchDeckText.slice(0, 40000) : pitchDeckText;
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      { role: "system", content: `${CHAT_SYSTEM_PROMPT}\n\nPitch deck content:\n\n${truncated}` },
+      ...history.map((h) => ({ role: h.role, content: h.content })),
+      { role: "user", content: question },
+    ],
+  });
+
+  return response.choices[0]?.message?.content ?? "I couldn't generate a response. Please try again.";
 }
