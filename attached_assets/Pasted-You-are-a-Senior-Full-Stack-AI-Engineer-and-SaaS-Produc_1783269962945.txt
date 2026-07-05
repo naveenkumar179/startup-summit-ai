@@ -1,0 +1,891 @@
+You are a Senior Full Stack AI Engineer and SaaS Product Architect.
+
+Your task is to build a production-quality AI SaaS application called "StartupBridge AI".
+
+Do NOT generate everything at once.
+Build the application module-by-module.
+Maintain clean architecture, reusable components, proper folder structure, and scalable code.
+
+=========================================================
+PROJECT OVERVIEW
+=========================================================
+
+StartupBridge AI is an AI-powered platform connecting Startup Founders with Investors.
+
+There are 3 user roles:
+
+1. Founder
+2. Investor
+3. Admin
+
+Founders upload startup information and a Pitch Deck (PDF).
+
+Investors discover startups and use AI to analyze them before contacting founders.
+
+AI is the core feature of this application.
+
+This should look like a modern SaaS product similar to Linear, Notion, Stripe Dashboard, Vercel Dashboard and PitchBook.
+
+=========================================================
+TECH STACK
+=========================================================
+
+Frontend
+
+React
+TypeScript
+Vite
+Tailwind CSS
+shadcn/ui
+React Router
+React Query
+Framer Motion
+Recharts
+Lucide Icons
+
+Backend
+
+Python
+FastAPI
+SQLAlchemy
+Pydantic
+
+Database
+
+PostgreSQL
+
+Authentication
+
+Clerk Authentication
+
+AI
+
+OpenAI API
+
+LangChain
+
+LangGraph
+
+ChromaDB
+
+PyMuPDF
+
+Sentence Transformers
+
+Deployment
+
+Frontend → Vercel
+
+Backend → Railway
+
+=========================================================
+PROJECT STRUCTURE
+=========================================================
+
+frontend/
+
+components/
+
+layouts/
+
+pages/
+
+hooks/
+
+services/
+
+contexts/
+
+types/
+
+assets/
+
+backend/
+
+routes/
+
+controllers/
+
+services/
+
+database/
+
+middlewares/
+
+models/
+
+schemas/
+
+ai/
+
+rag/
+
+agents/
+
+prompts/
+
+embeddings/
+
+chromadb/
+
+langgraph/
+
+uploads/
+
+=========================================================
+APPLICATION FLOW
+=========================================================
+
+Landing Page
+
+↓
+
+Login
+
+↓
+
+Register
+
+↓
+
+Select Role
+
+↓
+
+Founder Dashboard
+
+OR
+
+Investor Dashboard
+
+=========================================================
+LANDING PAGE
+=========================================================
+
+Modern Hero Section
+
+Navigation
+
+Home
+
+How It Works
+
+Features
+
+Pricing
+
+Resources
+
+Login
+
+Sign Up
+
+Hero
+
+Connect
+
+Pitch
+
+Invest
+
+Build the Future Together
+
+Buttons
+
+I'm a Founder
+
+I'm an Investor
+
+Sections
+
+Features
+
+How AI Works
+
+Testimonials
+
+Pricing
+
+Footer
+
+=========================================================
+AUTHENTICATION
+=========================================================
+
+Clerk Authentication
+
+Roles
+
+Founder
+
+Investor
+
+Admin
+
+Redirect users automatically after login.
+
+Founder
+
+↓
+
+Founder Dashboard
+
+Investor
+
+↓
+
+Investor Dashboard
+
+=========================================================
+FOUNDER DASHBOARD
+=========================================================
+
+Sidebar
+
+Dashboard
+
+My Startups
+
+Add Startup
+
+AI Analysis
+
+Pitch Decks
+
+Messages
+
+Settings
+
+Logout
+
+Dashboard Cards
+
+Total Startups
+
+Published
+
+AI Score
+
+Profile Views
+
+Recent Messages
+
+Recent Activity
+
+=========================================================
+ADD STARTUP PAGE
+=========================================================
+
+Fields
+
+Startup Name
+
+Tagline
+
+Industry
+
+Description
+
+Business Model
+
+Funding Required
+
+Location
+
+Website
+
+Founding Year
+
+Team Size
+
+Revenue
+
+Customers
+
+Upload Logo
+
+Upload Pitch Deck PDF
+
+Publish Button
+
+Save Draft Button
+
+After Publish
+
+↓
+
+Generate AI Analysis automatically.
+
+=========================================================
+STARTUP DETAILS PAGE
+=========================================================
+
+Tabs
+
+Overview
+
+Pitch Deck
+
+Team
+
+Financials
+
+AI Analysis
+
+Activity
+
+Buttons
+
+Contact Founder
+
+Save
+
+Chat with AI
+
+Generate AI Analysis
+
+Generate Due Diligence Report
+
+Download Pitch Deck
+
+=========================================================
+AI ANALYSIS PAGE
+=========================================================
+
+Investment Readiness Score
+
+SWOT Analysis
+
+Business Model Analysis
+
+Market Opportunity
+
+Competitor Analysis
+
+Risk Analysis
+
+Financial Analysis
+
+Growth Potential
+
+Recommendation
+
+Charts
+
+Graphs
+
+Progress Indicators
+
+Download Report Button
+
+=========================================================
+AI CHAT PAGE
+=========================================================
+
+Investor asks questions.
+
+Examples
+
+What problem does this startup solve?
+
+How many customers?
+
+What is the revenue model?
+
+Who are competitors?
+
+What are the risks?
+
+AI should answer ONLY using
+
+Uploaded Pitch Deck
+
+PLUS
+
+Web Search (if current information is needed)
+
+Use RAG.
+
+=========================================================
+DUE DILIGENCE REPORT PAGE
+=========================================================
+
+Generate professional report.
+
+Sections
+
+Executive Summary
+
+Company Overview
+
+Business Model
+
+Market Analysis
+
+Financial Analysis
+
+Traction
+
+Team
+
+Competition
+
+SWOT
+
+Risks
+
+Investment Recommendation
+
+Investment Score
+
+Export PDF
+
+=========================================================
+IMPROVE PITCH PAGE
+=========================================================
+
+Only Founder can access.
+
+AI analyzes uploaded Pitch Deck.
+
+Suggest
+
+Missing TAM
+
+Missing Revenue Model
+
+Weak Traction
+
+Weak Team Section
+
+Missing Go-To-Market Strategy
+
+Missing Financial Projections
+
+Missing Competitor Slide
+
+Generate examples.
+
+=========================================================
+INVESTOR DASHBOARD
+=========================================================
+
+Sidebar
+
+Dashboard
+
+Discover Startups
+
+Watchlist
+
+AI Due Diligence
+
+Messages
+
+Meetings
+
+Portfolio
+
+Settings
+
+Dashboard
+
+Recommended Startups
+
+Trending Startups
+
+Recent Investments
+
+AI Recommendations
+
+=========================================================
+DISCOVER STARTUPS PAGE
+=========================================================
+
+Search
+
+Industry Filter
+
+Funding Filter
+
+Stage Filter
+
+Country Filter
+
+Cards
+
+Startup Logo
+
+Title
+
+Industry
+
+Funding
+
+AI Match Score
+
+Investment Readiness
+
+View Details Button
+
+=========================================================
+STARTUP DETAILS NAVIGATION
+=========================================================
+
+Investor Dashboard
+
+↓
+
+Discover Startups
+
+↓
+
+View Details
+
+↓
+
+Startup Details
+
+↓
+
+Click AI Analysis
+
+↓
+
+AI Analysis Page
+
+↓
+
+Generate Report
+
+↓
+
+Due Diligence Report
+
+OR
+
+Click Chat with AI
+
+↓
+
+AI Chat Page
+
+=========================================================
+FOUNDER NAVIGATION
+=========================================================
+
+Founder Dashboard
+
+↓
+
+My Startups
+
+↓
+
+Select Startup
+
+↓
+
+Startup Details
+
+↓
+
+Improve Pitch
+
+↓
+
+Publish
+
+=========================================================
+RAG IMPLEMENTATION
+=========================================================
+
+Founder uploads Pitch Deck PDF.
+
+Pipeline
+
+PDF
+
+↓
+
+Text Extraction
+
+↓
+
+Cleaning
+
+↓
+
+Chunking
+
+↓
+
+Embedding
+
+↓
+
+Store in ChromaDB
+
+↓
+
+Retriever
+
+↓
+
+Prompt Augmentation
+
+↓
+
+OpenAI
+
+↓
+
+Answer
+
+=========================================================
+WEB SEARCH
+=========================================================
+
+If user asks about
+
+Current competitors
+
+Latest funding
+
+Industry trends
+
+Current market
+
+Use Web Search Tool.
+
+Otherwise use only RAG.
+
+=========================================================
+LANGGRAPH MULTI AGENT
+=========================================================
+
+Supervisor Agent
+
+↓
+
+Document Agent
+
+↓
+
+Research Agent
+
+↓
+
+Risk Agent
+
+↓
+
+Report Writer Agent
+
+↓
+
+Investment Advisor Agent
+
+Supervisor decides which agent to call.
+
+=========================================================
+AI FEATURES
+=========================================================
+
+Investment Score
+
+SWOT
+
+Competitor Analysis
+
+Risk Detection
+
+Executive Summary
+
+Market Research
+
+Financial Insights
+
+Pitch Improvement
+
+Investor Matching
+
+AI Chat
+
+Due Diligence
+
+=========================================================
+DATABASE TABLES
+=========================================================
+
+Users
+
+Startups
+
+PitchDecks
+
+InvestorProfiles
+
+FounderProfiles
+
+Messages
+
+Meetings
+
+Watchlist
+
+Reports
+
+Embeddings
+
+Notifications
+
+=========================================================
+API ENDPOINTS
+=========================================================
+
+POST /login
+
+POST /register
+
+GET /startups
+
+POST /startup
+
+PUT /startup
+
+DELETE /startup
+
+POST /upload-pitch
+
+POST /chat
+
+POST /analysis
+
+POST /generate-report
+
+GET /watchlist
+
+POST /watchlist
+
+=========================================================
+SECURITY
+=========================================================
+
+Role Based Access
+
+JWT
+
+File Validation
+
+Rate Limiting
+
+Input Validation
+
+Secure Upload
+
+=========================================================
+UI DESIGN
+=========================================================
+
+Professional SaaS
+
+Rounded Cards
+
+Soft Shadows
+
+Modern Typography
+
+Purple Accent
+
+Responsive
+
+Desktop First
+
+Mobile Friendly
+
+Dark Mode Ready
+
+=========================================================
+ANIMATIONS
+=========================================================
+
+Framer Motion
+
+Smooth Page Transitions
+
+Loading Skeletons
+
+Shimmer Effects
+
+Progress Bars
+
+=========================================================
+REPORT GENERATION
+=========================================================
+
+Generate downloadable PDF.
+
+Professional formatting.
+
+Charts.
+
+Tables.
+
+Summary.
+
+=========================================================
+EXTRA FEATURES
+=========================================================
+
+Notifications
+
+Bookmarks
+
+Investor Watchlist
+
+Meeting Scheduler
+
+Founder Analytics
+
+Investor Analytics
+
+Admin Dashboard
+
+=========================================================
+CODING RULES
+=========================================================
+
+Build feature-by-feature.
+
+Never generate placeholder code.
+
+Use TypeScript everywhere.
+
+Use reusable components.
+
+Write production-ready code.
+
+Use proper folder structure.
+
+Use environment variables.
+
+Write clean APIs.
+
+Implement loading states.
+
+Implement error handling.
+
+Write comments.
+
+Create reusable hooks.
+
+Use best practices.
+
+After completing each module, stop and wait for approval before moving to the next module.
+
+Do not skip modules.
+
+Always follow the UI flow and navigation described above.
+
+The final application should be production-ready and deployable.
