@@ -231,3 +231,42 @@ export const watchlist = pgTable(
 
 export type WatchlistItem = typeof watchlist.$inferSelect;
 export type InsertWatchlistItem = typeof watchlist.$inferInsert;
+
+export const meetingStatusEnum = pgEnum("meeting_status", [
+  "pending",
+  "confirmed",
+  "declined",
+  "cancelled",
+  "completed",
+]);
+
+export const meetings = pgTable(
+  "meetings",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    startupId: varchar("startup_id")
+      .notNull()
+      .references(() => startups.id, { onDelete: "cascade" }),
+    founderId: varchar("founder_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    investorId: varchar("investor_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    scheduledAt: timestamp("scheduled_at").notNull(),
+    durationMinutes: varchar("duration_minutes").notNull().default("30"),
+    agenda: text("agenda"),
+    status: meetingStatusEnum("status").notNull().default("pending"),
+    meetingLink: text("meeting_link"),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (table) => [
+    index("IDX_meetings_founder").on(table.founderId),
+    index("IDX_meetings_investor").on(table.investorId),
+    index("IDX_meetings_startup").on(table.startupId),
+  ]
+);
+
+export type Meeting = typeof meetings.$inferSelect;
+export type InsertMeeting = typeof meetings.$inferInsert;

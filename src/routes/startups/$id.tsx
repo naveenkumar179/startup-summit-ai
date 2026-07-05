@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Rocket,
@@ -8,6 +8,7 @@ import {
   MapPin,
   Users,
   Calendar,
+  CalendarClock,
   TrendingUp,
   Pencil,
   Bookmark,
@@ -20,6 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { founderSidebar, investorSidebar } from "@/components/dashboard/sidebars";
+import { ScheduleMeetingDialog } from "@/components/meetings/ScheduleMeetingDialog";
 import { useAuth } from "@/hooks/use-auth";
 import { stageLabel } from "@/lib/constants";
 import type { PitchDeck, Startup } from "@/lib/server/db/schema";
@@ -35,6 +37,7 @@ function StartupDetailsPage() {
   const { user, isLoading, isAuthenticated, hasRole } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [scheduleOpen, setScheduleOpen] = useState(false);
 
   useEffect(() => {
     if (isLoading) return;
@@ -155,18 +158,24 @@ function StartupDetailsPage() {
                     </Button>
                   </Link>
                 ) : user?.role === "investor" ? (
-                  <Button
-                    variant={data.isWatchlisted ? "secondary" : "outline"}
-                    onClick={() => watchlistMutation.mutate()}
-                    disabled={watchlistMutation.isPending}
-                  >
-                    {data.isWatchlisted ? (
-                      <BookmarkCheck className="mr-1.5 h-4 w-4" />
-                    ) : (
-                      <Bookmark className="mr-1.5 h-4 w-4" />
-                    )}
-                    {data.isWatchlisted ? "Saved" : "Save"}
-                  </Button>
+                  <>
+                    <Button
+                      variant={data.isWatchlisted ? "secondary" : "outline"}
+                      onClick={() => watchlistMutation.mutate()}
+                      disabled={watchlistMutation.isPending}
+                    >
+                      {data.isWatchlisted ? (
+                        <BookmarkCheck className="mr-1.5 h-4 w-4" />
+                      ) : (
+                        <Bookmark className="mr-1.5 h-4 w-4" />
+                      )}
+                      {data.isWatchlisted ? "Saved" : "Save"}
+                    </Button>
+                    <Button onClick={() => setScheduleOpen(true)}>
+                      <CalendarClock className="mr-1.5 h-4 w-4" />
+                      Schedule Meeting
+                    </Button>
+                  </>
                 ) : null}
                 {data.startup.pitchDeckId && (
                   <>
@@ -261,6 +270,14 @@ function StartupDetailsPage() {
             </div>
           </div>
         </div>
+      )}
+      {data && user?.role === "investor" && (
+        <ScheduleMeetingDialog
+          startupId={data.startup.id}
+          startupName={data.startup.name}
+          open={scheduleOpen}
+          onOpenChange={setScheduleOpen}
+        />
       )}
     </DashboardLayout>
   );

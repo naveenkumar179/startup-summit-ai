@@ -16,8 +16,10 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as StartupsIdRouteImport } from './routes/startups/$id'
 import { Route as InvestorWatchlistRouteImport } from './routes/investor/watchlist'
 import { Route as InvestorPortfolioRouteImport } from './routes/investor/portfolio'
+import { Route as InvestorMeetingsRouteImport } from './routes/investor/meetings'
 import { Route as InvestorDiscoverRouteImport } from './routes/investor/discover'
 import { Route as InvestorDashboardRouteImport } from './routes/investor/dashboard'
+import { Route as FounderMeetingsRouteImport } from './routes/founder/meetings'
 import { Route as FounderDashboardRouteImport } from './routes/founder/dashboard'
 import { Route as ApiMatchesRouteImport } from './routes/api/matches'
 import { Route as ApiLogoutRouteImport } from './routes/api/logout'
@@ -27,6 +29,7 @@ import { Route as FounderStartupsIndexRouteImport } from './routes/founder/start
 import { Route as ApiWatchlistIndexRouteImport } from './routes/api/watchlist/index'
 import { Route as ApiStartupsIndexRouteImport } from './routes/api/startups/index'
 import { Route as ApiPitchDeckIndexRouteImport } from './routes/api/pitch-deck/index'
+import { Route as ApiMeetingsIndexRouteImport } from './routes/api/meetings/index'
 import { Route as ApiConversationsIndexRouteImport } from './routes/api/conversations/index'
 import { Route as StartupsIdDueDiligenceRouteImport } from './routes/startups/$id.due-diligence'
 import { Route as StartupsIdChatRouteImport } from './routes/startups/$id.chat'
@@ -36,6 +39,7 @@ import { Route as ApiStartupsDiscoverRouteImport } from './routes/api/startups/d
 import { Route as ApiStartupsIdRouteImport } from './routes/api/startups/$id'
 import { Route as ApiSettingsProfileRouteImport } from './routes/api/settings/profile'
 import { Route as ApiPitchDeckUploadRouteImport } from './routes/api/pitch-deck/upload'
+import { Route as ApiMeetingsIdRouteImport } from './routes/api/meetings/$id'
 import { Route as ApiInvestorProfileRouteImport } from './routes/api/investor/profile'
 import { Route as ApiFounderProfileRouteImport } from './routes/api/founder/profile'
 import { Route as ApiAuthUserRouteImport } from './routes/api/auth/user'
@@ -82,6 +86,11 @@ const InvestorPortfolioRoute = InvestorPortfolioRouteImport.update({
   path: '/investor/portfolio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InvestorMeetingsRoute = InvestorMeetingsRouteImport.update({
+  id: '/investor/meetings',
+  path: '/investor/meetings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InvestorDiscoverRoute = InvestorDiscoverRouteImport.update({
   id: '/investor/discover',
   path: '/investor/discover',
@@ -90,6 +99,11 @@ const InvestorDiscoverRoute = InvestorDiscoverRouteImport.update({
 const InvestorDashboardRoute = InvestorDashboardRouteImport.update({
   id: '/investor/dashboard',
   path: '/investor/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FounderMeetingsRoute = FounderMeetingsRouteImport.update({
+  id: '/founder/meetings',
+  path: '/founder/meetings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FounderDashboardRoute = FounderDashboardRouteImport.update({
@@ -137,6 +151,11 @@ const ApiPitchDeckIndexRoute = ApiPitchDeckIndexRouteImport.update({
   path: '/api/pitch-deck/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiMeetingsIndexRoute = ApiMeetingsIndexRouteImport.update({
+  id: '/api/meetings/',
+  path: '/api/meetings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiConversationsIndexRoute = ApiConversationsIndexRouteImport.update({
   id: '/api/conversations/',
   path: '/api/conversations/',
@@ -180,6 +199,11 @@ const ApiSettingsProfileRoute = ApiSettingsProfileRouteImport.update({
 const ApiPitchDeckUploadRoute = ApiPitchDeckUploadRouteImport.update({
   id: '/api/pitch-deck/upload',
   path: '/api/pitch-deck/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMeetingsIdRoute = ApiMeetingsIdRouteImport.update({
+  id: '/api/meetings/$id',
+  path: '/api/meetings/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiInvestorProfileRoute = ApiInvestorProfileRouteImport.update({
@@ -245,8 +269,10 @@ export interface FileRoutesByFullPath {
   '/api/logout': typeof ApiLogoutRoute
   '/api/matches': typeof ApiMatchesRoute
   '/founder/dashboard': typeof FounderDashboardRoute
+  '/founder/meetings': typeof FounderMeetingsRoute
   '/investor/dashboard': typeof InvestorDashboardRoute
   '/investor/discover': typeof InvestorDiscoverRoute
+  '/investor/meetings': typeof InvestorMeetingsRoute
   '/investor/portfolio': typeof InvestorPortfolioRoute
   '/investor/watchlist': typeof InvestorWatchlistRoute
   '/startups/$id': typeof StartupsIdRouteWithChildren
@@ -254,6 +280,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/user': typeof ApiAuthUserRoute
   '/api/founder/profile': typeof ApiFounderProfileRoute
   '/api/investor/profile': typeof ApiInvestorProfileRoute
+  '/api/meetings/$id': typeof ApiMeetingsIdRoute
   '/api/pitch-deck/upload': typeof ApiPitchDeckUploadRoute
   '/api/settings/profile': typeof ApiSettingsProfileRoute
   '/api/startups/$id': typeof ApiStartupsIdRouteWithChildren
@@ -263,6 +290,7 @@ export interface FileRoutesByFullPath {
   '/startups/$id/chat': typeof StartupsIdChatRoute
   '/startups/$id/due-diligence': typeof StartupsIdDueDiligenceRoute
   '/api/conversations/': typeof ApiConversationsIndexRoute
+  '/api/meetings/': typeof ApiMeetingsIndexRoute
   '/api/pitch-deck/': typeof ApiPitchDeckIndexRoute
   '/api/startups/': typeof ApiStartupsIndexRoute
   '/api/watchlist/': typeof ApiWatchlistIndexRoute
@@ -284,8 +312,10 @@ export interface FileRoutesByTo {
   '/api/logout': typeof ApiLogoutRoute
   '/api/matches': typeof ApiMatchesRoute
   '/founder/dashboard': typeof FounderDashboardRoute
+  '/founder/meetings': typeof FounderMeetingsRoute
   '/investor/dashboard': typeof InvestorDashboardRoute
   '/investor/discover': typeof InvestorDiscoverRoute
+  '/investor/meetings': typeof InvestorMeetingsRoute
   '/investor/portfolio': typeof InvestorPortfolioRoute
   '/investor/watchlist': typeof InvestorWatchlistRoute
   '/startups/$id': typeof StartupsIdRouteWithChildren
@@ -293,6 +323,7 @@ export interface FileRoutesByTo {
   '/api/auth/user': typeof ApiAuthUserRoute
   '/api/founder/profile': typeof ApiFounderProfileRoute
   '/api/investor/profile': typeof ApiInvestorProfileRoute
+  '/api/meetings/$id': typeof ApiMeetingsIdRoute
   '/api/pitch-deck/upload': typeof ApiPitchDeckUploadRoute
   '/api/settings/profile': typeof ApiSettingsProfileRoute
   '/api/startups/$id': typeof ApiStartupsIdRouteWithChildren
@@ -302,6 +333,7 @@ export interface FileRoutesByTo {
   '/startups/$id/chat': typeof StartupsIdChatRoute
   '/startups/$id/due-diligence': typeof StartupsIdDueDiligenceRoute
   '/api/conversations': typeof ApiConversationsIndexRoute
+  '/api/meetings': typeof ApiMeetingsIndexRoute
   '/api/pitch-deck': typeof ApiPitchDeckIndexRoute
   '/api/startups': typeof ApiStartupsIndexRoute
   '/api/watchlist': typeof ApiWatchlistIndexRoute
@@ -324,8 +356,10 @@ export interface FileRoutesById {
   '/api/logout': typeof ApiLogoutRoute
   '/api/matches': typeof ApiMatchesRoute
   '/founder/dashboard': typeof FounderDashboardRoute
+  '/founder/meetings': typeof FounderMeetingsRoute
   '/investor/dashboard': typeof InvestorDashboardRoute
   '/investor/discover': typeof InvestorDiscoverRoute
+  '/investor/meetings': typeof InvestorMeetingsRoute
   '/investor/portfolio': typeof InvestorPortfolioRoute
   '/investor/watchlist': typeof InvestorWatchlistRoute
   '/startups/$id': typeof StartupsIdRouteWithChildren
@@ -333,6 +367,7 @@ export interface FileRoutesById {
   '/api/auth/user': typeof ApiAuthUserRoute
   '/api/founder/profile': typeof ApiFounderProfileRoute
   '/api/investor/profile': typeof ApiInvestorProfileRoute
+  '/api/meetings/$id': typeof ApiMeetingsIdRoute
   '/api/pitch-deck/upload': typeof ApiPitchDeckUploadRoute
   '/api/settings/profile': typeof ApiSettingsProfileRoute
   '/api/startups/$id': typeof ApiStartupsIdRouteWithChildren
@@ -342,6 +377,7 @@ export interface FileRoutesById {
   '/startups/$id/chat': typeof StartupsIdChatRoute
   '/startups/$id/due-diligence': typeof StartupsIdDueDiligenceRoute
   '/api/conversations/': typeof ApiConversationsIndexRoute
+  '/api/meetings/': typeof ApiMeetingsIndexRoute
   '/api/pitch-deck/': typeof ApiPitchDeckIndexRoute
   '/api/startups/': typeof ApiStartupsIndexRoute
   '/api/watchlist/': typeof ApiWatchlistIndexRoute
@@ -365,8 +401,10 @@ export interface FileRouteTypes {
     | '/api/logout'
     | '/api/matches'
     | '/founder/dashboard'
+    | '/founder/meetings'
     | '/investor/dashboard'
     | '/investor/discover'
+    | '/investor/meetings'
     | '/investor/portfolio'
     | '/investor/watchlist'
     | '/startups/$id'
@@ -374,6 +412,7 @@ export interface FileRouteTypes {
     | '/api/auth/user'
     | '/api/founder/profile'
     | '/api/investor/profile'
+    | '/api/meetings/$id'
     | '/api/pitch-deck/upload'
     | '/api/settings/profile'
     | '/api/startups/$id'
@@ -383,6 +422,7 @@ export interface FileRouteTypes {
     | '/startups/$id/chat'
     | '/startups/$id/due-diligence'
     | '/api/conversations/'
+    | '/api/meetings/'
     | '/api/pitch-deck/'
     | '/api/startups/'
     | '/api/watchlist/'
@@ -404,8 +444,10 @@ export interface FileRouteTypes {
     | '/api/logout'
     | '/api/matches'
     | '/founder/dashboard'
+    | '/founder/meetings'
     | '/investor/dashboard'
     | '/investor/discover'
+    | '/investor/meetings'
     | '/investor/portfolio'
     | '/investor/watchlist'
     | '/startups/$id'
@@ -413,6 +455,7 @@ export interface FileRouteTypes {
     | '/api/auth/user'
     | '/api/founder/profile'
     | '/api/investor/profile'
+    | '/api/meetings/$id'
     | '/api/pitch-deck/upload'
     | '/api/settings/profile'
     | '/api/startups/$id'
@@ -422,6 +465,7 @@ export interface FileRouteTypes {
     | '/startups/$id/chat'
     | '/startups/$id/due-diligence'
     | '/api/conversations'
+    | '/api/meetings'
     | '/api/pitch-deck'
     | '/api/startups'
     | '/api/watchlist'
@@ -443,8 +487,10 @@ export interface FileRouteTypes {
     | '/api/logout'
     | '/api/matches'
     | '/founder/dashboard'
+    | '/founder/meetings'
     | '/investor/dashboard'
     | '/investor/discover'
+    | '/investor/meetings'
     | '/investor/portfolio'
     | '/investor/watchlist'
     | '/startups/$id'
@@ -452,6 +498,7 @@ export interface FileRouteTypes {
     | '/api/auth/user'
     | '/api/founder/profile'
     | '/api/investor/profile'
+    | '/api/meetings/$id'
     | '/api/pitch-deck/upload'
     | '/api/settings/profile'
     | '/api/startups/$id'
@@ -461,6 +508,7 @@ export interface FileRouteTypes {
     | '/startups/$id/chat'
     | '/startups/$id/due-diligence'
     | '/api/conversations/'
+    | '/api/meetings/'
     | '/api/pitch-deck/'
     | '/api/startups/'
     | '/api/watchlist/'
@@ -483,8 +531,10 @@ export interface RootRouteChildren {
   ApiLogoutRoute: typeof ApiLogoutRoute
   ApiMatchesRoute: typeof ApiMatchesRoute
   FounderDashboardRoute: typeof FounderDashboardRoute
+  FounderMeetingsRoute: typeof FounderMeetingsRoute
   InvestorDashboardRoute: typeof InvestorDashboardRoute
   InvestorDiscoverRoute: typeof InvestorDiscoverRoute
+  InvestorMeetingsRoute: typeof InvestorMeetingsRoute
   InvestorPortfolioRoute: typeof InvestorPortfolioRoute
   InvestorWatchlistRoute: typeof InvestorWatchlistRoute
   StartupsIdRoute: typeof StartupsIdRouteWithChildren
@@ -492,6 +542,7 @@ export interface RootRouteChildren {
   ApiAuthUserRoute: typeof ApiAuthUserRoute
   ApiFounderProfileRoute: typeof ApiFounderProfileRoute
   ApiInvestorProfileRoute: typeof ApiInvestorProfileRoute
+  ApiMeetingsIdRoute: typeof ApiMeetingsIdRoute
   ApiPitchDeckUploadRoute: typeof ApiPitchDeckUploadRoute
   ApiSettingsProfileRoute: typeof ApiSettingsProfileRoute
   ApiStartupsIdRoute: typeof ApiStartupsIdRouteWithChildren
@@ -499,6 +550,7 @@ export interface RootRouteChildren {
   ApiWatchlistIdRoute: typeof ApiWatchlistIdRoute
   FounderStartupsNewRoute: typeof FounderStartupsNewRoute
   ApiConversationsIndexRoute: typeof ApiConversationsIndexRoute
+  ApiMeetingsIndexRoute: typeof ApiMeetingsIndexRoute
   ApiPitchDeckIndexRoute: typeof ApiPitchDeckIndexRoute
   ApiStartupsIndexRoute: typeof ApiStartupsIndexRoute
   ApiWatchlistIndexRoute: typeof ApiWatchlistIndexRoute
@@ -559,6 +611,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InvestorPortfolioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/investor/meetings': {
+      id: '/investor/meetings'
+      path: '/investor/meetings'
+      fullPath: '/investor/meetings'
+      preLoaderRoute: typeof InvestorMeetingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/investor/discover': {
       id: '/investor/discover'
       path: '/investor/discover'
@@ -571,6 +630,13 @@ declare module '@tanstack/react-router' {
       path: '/investor/dashboard'
       fullPath: '/investor/dashboard'
       preLoaderRoute: typeof InvestorDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/founder/meetings': {
+      id: '/founder/meetings'
+      path: '/founder/meetings'
+      fullPath: '/founder/meetings'
+      preLoaderRoute: typeof FounderMeetingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/founder/dashboard': {
@@ -636,6 +702,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPitchDeckIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/meetings/': {
+      id: '/api/meetings/'
+      path: '/api/meetings'
+      fullPath: '/api/meetings/'
+      preLoaderRoute: typeof ApiMeetingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/conversations/': {
       id: '/api/conversations/'
       path: '/api/conversations'
@@ -697,6 +770,13 @@ declare module '@tanstack/react-router' {
       path: '/api/pitch-deck/upload'
       fullPath: '/api/pitch-deck/upload'
       preLoaderRoute: typeof ApiPitchDeckUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/meetings/$id': {
+      id: '/api/meetings/$id'
+      path: '/api/meetings/$id'
+      fullPath: '/api/meetings/$id'
+      preLoaderRoute: typeof ApiMeetingsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/investor/profile': {
@@ -812,8 +892,10 @@ const rootRouteChildren: RootRouteChildren = {
   ApiLogoutRoute: ApiLogoutRoute,
   ApiMatchesRoute: ApiMatchesRoute,
   FounderDashboardRoute: FounderDashboardRoute,
+  FounderMeetingsRoute: FounderMeetingsRoute,
   InvestorDashboardRoute: InvestorDashboardRoute,
   InvestorDiscoverRoute: InvestorDiscoverRoute,
+  InvestorMeetingsRoute: InvestorMeetingsRoute,
   InvestorPortfolioRoute: InvestorPortfolioRoute,
   InvestorWatchlistRoute: InvestorWatchlistRoute,
   StartupsIdRoute: StartupsIdRouteWithChildren,
@@ -821,6 +903,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthUserRoute: ApiAuthUserRoute,
   ApiFounderProfileRoute: ApiFounderProfileRoute,
   ApiInvestorProfileRoute: ApiInvestorProfileRoute,
+  ApiMeetingsIdRoute: ApiMeetingsIdRoute,
   ApiPitchDeckUploadRoute: ApiPitchDeckUploadRoute,
   ApiSettingsProfileRoute: ApiSettingsProfileRoute,
   ApiStartupsIdRoute: ApiStartupsIdRouteWithChildren,
@@ -828,6 +911,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiWatchlistIdRoute: ApiWatchlistIdRoute,
   FounderStartupsNewRoute: FounderStartupsNewRoute,
   ApiConversationsIndexRoute: ApiConversationsIndexRoute,
+  ApiMeetingsIndexRoute: ApiMeetingsIndexRoute,
   ApiPitchDeckIndexRoute: ApiPitchDeckIndexRoute,
   ApiStartupsIndexRoute: ApiStartupsIndexRoute,
   ApiWatchlistIndexRoute: ApiWatchlistIndexRoute,
