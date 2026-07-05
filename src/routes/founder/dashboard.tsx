@@ -14,6 +14,7 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import { DashboardLayout, type SidebarItem } from "@/components/dashboard/DashboardLayout";
+import { PitchDeckUpload } from "@/components/pitch-deck/PitchDeckUpload";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/founder/dashboard")({
@@ -94,17 +95,7 @@ function FounderDashboard() {
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <div className="rounded-2xl border border-dashed border-border bg-card p-8 text-center">
-          <FileText className="mx-auto h-8 w-8 text-muted-foreground" />
-          <h3 className="mt-3 font-semibold text-foreground">No pitch deck yet</h3>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Upload your deck to unlock AI analysis, RAG chat, and investor matching.
-          </p>
-          <button className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
-            Upload Pitch Deck
-            <ArrowUpRight className="h-4 w-4" />
-          </button>
-        </div>
+        <PitchDeckUpload />
 
         <div className="rounded-2xl border border-dashed border-border bg-card p-8 text-center">
           <Users className="mx-auto h-8 w-8 text-muted-foreground" />
