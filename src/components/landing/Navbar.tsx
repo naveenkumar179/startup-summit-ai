@@ -1,14 +1,19 @@
 import { Link } from "@tanstack/react-router";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, HelpCircle, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { BrandMark } from "./BrandMark";
 
 const links = [
-  { label: "Home", href: "/", active: true },
-  { label: "Startups", href: "/" },
-  { label: "Investors", href: "/" },
-  { label: "How it Works", href: "/" },
-  { label: "Pricing", href: "/" },
+  { label: "Startups", href: "#startups" },
+  { label: "Investors", href: "#investors" },
+  { label: "How it Works", href: "#how-it-works" },
+  { label: "Pricing", href: "#pricing" },
 ];
 
 export function Navbar() {
@@ -24,21 +29,31 @@ export function Navbar() {
 
         <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => (
-            <Link
+            <a
               key={l.label}
-              to={l.href}
-              className={`text-sm transition-colors ${
-                l.active
-                  ? "text-primary font-medium"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
+              href={l.href}
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               {l.label}
-            </Link>
+            </a>
           ))}
-          <button className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1">
-            Resources <ChevronDown className="h-3.5 w-3.5" />
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center gap-1 text-sm text-muted-foreground outline-none hover:text-foreground">
+              Resources <ChevronDown className="h-3.5 w-3.5" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <a href="#faq" className="flex items-center gap-2 cursor-pointer">
+                  <HelpCircle className="h-4 w-4" /> FAQ
+                </a>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <a href="#resources" className="flex items-center gap-2 cursor-pointer">
+                  <Mail className="h-4 w-4" /> Contact Support
+                </a>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </nav>
 
         <div className="flex items-center gap-2">

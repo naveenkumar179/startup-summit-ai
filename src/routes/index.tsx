@@ -2,6 +2,14 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Hero } from "@/components/landing/Hero";
+import {
+  StartupsSection,
+  InvestorsSection,
+  HowItWorksSection,
+  PricingSection,
+  FaqSection,
+  LandingFooter,
+} from "@/components/landing/Sections";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/")({
@@ -49,6 +57,12 @@ function LandingPage() {
     <div className="min-h-screen bg-background">
       <Navbar />
       <Hero />
+      <StartupsSection />
+      <InvestorsSection />
+      <HowItWorksSection />
+      <PricingSection />
+      <FaqSection />
+      <LandingFooter />
     </div>
   );
 }

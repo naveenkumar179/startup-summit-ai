@@ -7,7 +7,7 @@ import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { investorSidebar } from "@/components/dashboard/sidebars";
 import { useAuth } from "@/hooks/use-auth";
 import { stageLabel } from "@/lib/constants";
-import type { Meeting, Startup, WatchlistItem } from "@/lib/server/db/schema";
+import type { Startup, WatchlistItem } from "@/lib/server/db/schema";
 
 export const Route = createFileRoute("/investor/portfolio")({
   component: PortfolioPage,
@@ -48,16 +48,6 @@ function PortfolioPage() {
     enabled,
   });
 
-  const { data: meetings, isLoading: meetingsLoading } = useQuery({
-    queryKey: ["/api/meetings"],
-    queryFn: async () => {
-      const res = await fetch("/api/meetings");
-      if (!res.ok) throw new Error("Failed to load meetings");
-      return res.json() as Promise<Meeting[]>;
-    },
-    enabled,
-  });
-
   if (isLoading || !isAuthenticated || !hasRole || user?.role !== "investor") {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -67,7 +57,6 @@ function PortfolioPage() {
   }
 
   const totalSaved = watchlistData?.length ?? 0;
-  const upcomingMeetings = (meetings ?? []).filter((m) => m.status === "scheduled").length;
 
   return (
     <DashboardLayout items={sidebarItems} title="Portfolio">
@@ -79,16 +68,9 @@ function PortfolioPage() {
           </div>
           <p className="mt-2 text-2xl font-bold text-foreground">{totalSaved}</p>
         </div>
-        <div className="rounded-2xl border border-border bg-card p-5">
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Rocket className="h-4 w-4" />
-            <span className="text-sm">Upcoming meetings</span>
-          </div>
-          <p className="mt-2 text-2xl font-bold text-foreground">{upcomingMeetings}</p>
-        </div>
       </div>
 
-      {watchlistLoading || meetingsLoading ? (
+      {watchlistLoading ? (
         <div className="rounded-2xl border border-border bg-card p-10 text-center">
           <Loader2 className="mx-auto h-6 w-6 animate-spin text-muted-foreground" />
         </div>
