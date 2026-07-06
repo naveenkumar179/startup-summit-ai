@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { and, desc, eq } from "drizzle-orm";
 import { requireUser } from "@/lib/server/auth";
 import { db } from "@/lib/server/db";
-import { startups, startupStageEnum } from "@/lib/server/db/schema";
+import { pitchDecks, startups, startupStageEnum } from "@/lib/server/db/schema";
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -51,6 +51,17 @@ export const Route = createFileRoute("/api/startups/")({
             ? (body.stage as (typeof VALID_STAGES)[number])
             : "idea";
 
+          let pitchDeckId: string | null = null;
+          if (body.pitchDeckId?.trim()) {
+            const [deck] = await db
+              .select()
+              .from(pitchDecks)
+              .where(eq(pitchDecks.id, body.pitchDeckId.trim()));
+            if (deck && deck.userId === user.id) {
+              pitchDeckId = deck.id;
+            }
+          }
+
           const [startup] = await db
             .insert(startups)
             .values({
@@ -69,6 +80,7 @@ export const Route = createFileRoute("/api/startups/")({
               revenue: body.revenue?.trim() || null,
               customers: body.customers?.trim() || null,
               logoUrl: body.logoUrl || null,
+              pitchDeckId,
               status: body.status === "published" ? "published" : "draft",
             })
             .returning();

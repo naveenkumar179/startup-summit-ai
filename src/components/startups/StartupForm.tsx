@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { ImagePlus, Loader2 } from "lucide-react";
+import { FileText, ImagePlus, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { INDUSTRY_OPTIONS, STAGE_OPTIONS } from "@/lib/constants";
-import type { Startup } from "@/lib/server/db/schema";
+import type { PitchDeck, Startup } from "@/lib/server/db/schema";
 
 type StartupFormValues = {
   name: string;
@@ -31,6 +31,7 @@ type StartupFormValues = {
   revenue: string;
   customers: string;
   logoUrl: string;
+  pitchDeckId: string;
 };
 
 function fromStartup(startup?: Startup): StartupFormValues {
@@ -49,7 +50,14 @@ function fromStartup(startup?: Startup): StartupFormValues {
     revenue: startup?.revenue ?? "",
     customers: startup?.customers ?? "",
     logoUrl: startup?.logoUrl ?? "",
+    pitchDeckId: startup?.pitchDeckId ?? "",
   };
+}
+
+async function fetchDecks(): Promise<PitchDeck[]> {
+  const res = await fetch("/api/pitch-deck/list");
+  if (!res.ok) throw new Error("Failed to load pitch decks");
+  return res.json();
 }
 
 export function StartupForm({ startup }: { startup?: Startup }) {
@@ -58,6 +66,12 @@ export function StartupForm({ startup }: { startup?: Startup }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const isEdit = !!startup;
+
+  const { data: decks, isLoading: decksLoading } = useQuery({
+    queryKey: ["/api/pitch-deck/list"],
+    queryFn: fetchDecks,
+  });
+  const analyzedDecks = (decks ?? []).filter((d) => d.status === "analyzed");
 
   function set<K extends keyof StartupFormValues>(key: K, value: StartupFormValues[K]) {
     setValues((v) => ({ ...v, [key]: value }));
@@ -77,7 +91,7 @@ export function StartupForm({ startup }: { startup?: Startup }) {
 
   const mutation = useMutation({
     mutationFn: async (status: "draft" | "published") => {
-      const payload = { ...values, status };
+      const payload = { ...values, pitchDeckId: values.pitchDeckId || null, status };
       const res = await fetch(isEdit ? `/api/startups/${startup!.id}` : "/api/startups", {
         method: isEdit ? "PATCH" : "POST",
         headers: { "content-type": "application/json" },
@@ -199,6 +213,43 @@ export function StartupForm({ startup }: { startup?: Startup }) {
             <Input id="customers" value={values.customers} onChange={(e) => set("customers", e.target.value)} placeholder="120 paying customers" />
           </div>
         </div>
+      </div>
+
+      <div className="rounded-2xl border border-border bg-card p-6">
+        <h3 className="mb-4 font-semibold text-foreground">Pitch Deck</h3>
+        <p className="mb-3 text-sm text-muted-foreground">
+          Link an analyzed pitch deck to unlock AI chat, due diligence reports, and improvement
+          suggestions for this startup.
+        </p>
+        {decksLoading ? (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Loader2 className="h-4 w-4 animate-spin" /> Loading your pitch decks...
+          </div>
+        ) : analyzedDecks.length === 0 ? (
+          <p className="text-sm text-muted-foreground">
+            You don't have any analyzed pitch decks yet. Upload one from the Pitch Decks page,
+            then come back here to link it.
+          </p>
+        ) : (
+          <Select
+            value={values.pitchDeckId || "none"}
+            onValueChange={(v) => set("pitchDeckId", v === "none" ? "" : v)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select a pitch deck" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">No pitch deck</SelectItem>
+              {analyzedDecks.map((d) => (
+                <SelectItem key={d.id} value={d.id}>
+                  <span className="flex items-center gap-2">
+                    <FileText className="h-3.5 w-3.5" /> {d.fileName}
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
       </div>
 
       <div className="rounded-2xl border border-border bg-card p-6">

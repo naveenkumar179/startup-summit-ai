@@ -99,12 +99,23 @@ export const Route = createFileRoute("/api/startups/$id")({
             "revenue",
             "customers",
             "logoUrl",
-            "pitchDeckId",
           ] as const;
 
           for (const field of stringFields) {
             if (field in body) {
               update[field] = body[field]?.trim() || null;
+            }
+          }
+
+          if ("pitchDeckId" in body) {
+            const rawId = body.pitchDeckId?.trim();
+            if (!rawId) {
+              update.pitchDeckId = null;
+            } else {
+              const [deck] = await db.select().from(pitchDecks).where(eq(pitchDecks.id, rawId));
+              if (deck && deck.userId === user.id) {
+                update.pitchDeckId = deck.id;
+              }
             }
           }
 

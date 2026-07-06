@@ -278,8 +278,15 @@ function StartupDetailsPage() {
               {!data.startup.pitchDeckId && data.isOwner && (
                 <div className="rounded-2xl border border-dashed border-border bg-card p-6 text-center">
                   <p className="text-sm text-muted-foreground">
-                    Upload a pitch deck from your dashboard to unlock AI chat, due diligence reports, and improvement suggestions for this startup.
+                    Link a pitch deck to unlock AI chat, due diligence reports, and improvement suggestions for this startup.
                   </p>
+                  <Link
+                    to="/founder/startups/$id/edit"
+                    params={{ id: data.startup.id }}
+                    className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                  >
+                    <Pencil className="h-3.5 w-3.5" /> Link a pitch deck
+                  </Link>
                 </div>
               )}
             </div>
