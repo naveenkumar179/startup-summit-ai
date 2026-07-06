@@ -164,7 +164,7 @@ function DueDiligencePage() {
             {pending.map((s) => (
               <Link
                 key={s.id}
-                to="/startups/$id"
+                to="/startups/$id/due-diligence"
                 params={{ id: s.id }}
                 className="flex h-full flex-col rounded-2xl border border-dashed border-border bg-card p-5 transition hover:border-primary/50"
               >

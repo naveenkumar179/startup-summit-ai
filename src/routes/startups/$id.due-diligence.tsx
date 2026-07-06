@@ -289,7 +289,7 @@ function DueDiligencePage() {
   }
 
   const sidebarItems =
-    user?.role === "investor" ? investorSidebar("discover") : founderSidebar("startups");
+    user?.role === "investor" ? investorSidebar("due-diligence") : founderSidebar("startups");
   const analysis = data.startup.detailedAnalysis;
 
   return (
