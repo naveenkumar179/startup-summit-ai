@@ -52,7 +52,7 @@ ${historyText ? `Conversation so far:\n${historyText}\n` : ""}Investor's questio
 
   try {
     const response = await openai.responses.create({
-      model: "gpt-4o-mini",
+      model: "llama-3.3-70b-versatile",
       tools: [{ type: "web_search_preview" }],
       input,
     });
@@ -105,7 +105,7 @@ export async function researchMarketContext(
   const openai = getOpenAIClient();
   try {
     const response = await openai.responses.create({
-      model: "gpt-4o-mini",
+      model: "llama-3.3-70b-versatile",
       tools: [{ type: "web_search_preview" }],
       input: `${MARKET_RESEARCH_PROMPT}\n\nStartup: ${startupName}\nIndustry: ${industry}`,
     });

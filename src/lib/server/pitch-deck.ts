@@ -57,7 +57,7 @@ export async function analyzePitchDeckText(text: string): Promise<PitchDeckAnaly
   const truncated = text.length > 40000 ? text.slice(0, 40000) : text;
 
   const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "llama-3.3-70b-versatile",
     messages: [
       { role: "system", content: SYSTEM_PROMPT },
       { role: "user", content: `Pitch deck content:\n\n${truncated}` },
@@ -108,7 +108,7 @@ export async function generateImprovementSuggestions(
   const truncated = text.length > 40000 ? text.slice(0, 40000) : text;
 
   const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "llama-3.3-70b-versatile",
     messages: [
       { role: "system", content: IMPROVEMENT_SYSTEM_PROMPT },
       { role: "user", content: `Pitch deck content:\n\n${truncated}` },
@@ -213,7 +213,7 @@ async function answerFromPitchDeckOnly(
   const openai = getOpenAIClient();
 
   const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "llama-3.3-70b-versatile",
     messages: [
       { role: "system", content: `${CHAT_SYSTEM_PROMPT}\n\nPitch deck content:\n\n${content}` },
       ...history.map((h) => ({ role: h.role, content: h.content })),

@@ -47,7 +47,7 @@ export async function analyzeDocument(pitchDeckText: string): Promise<DocumentFi
   const truncated = pitchDeckText.length > 40000 ? pitchDeckText.slice(0, 40000) : pitchDeckText;
 
   const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "llama-3.3-70b-versatile",
     messages: [
       { role: "system", content: DOCUMENT_AGENT_SYSTEM_PROMPT },
       { role: "user", content: `Pitch deck content:\n\n${truncated}` },

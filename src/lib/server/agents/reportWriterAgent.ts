@@ -52,7 +52,7 @@ export async function writeDueDiligenceReport(
   const openai = getOpenAIClient();
 
   const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "llama-3.3-70b-versatile",
     messages: [
       { role: "system", content: REPORT_WRITER_SYSTEM_PROMPT },
       {

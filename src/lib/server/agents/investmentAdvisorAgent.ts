@@ -34,7 +34,7 @@ export async function scoreInvestment(
   const openai = getOpenAIClient();
 
   const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "llama-3.3-70b-versatile",
     messages: [
       { role: "system", content: INVESTMENT_ADVISOR_SYSTEM_PROMPT },
       {

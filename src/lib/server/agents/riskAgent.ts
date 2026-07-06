@@ -32,7 +32,7 @@ export async function assessRisks(
   const truncated = pitchDeckText.length > 40000 ? pitchDeckText.slice(0, 40000) : pitchDeckText;
 
   const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "llama-3.3-70b-versatile",
     messages: [
       { role: "system", content: RISK_AGENT_SYSTEM_PROMPT },
       {
