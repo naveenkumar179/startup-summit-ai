@@ -183,29 +183,25 @@ function StartupDetailsPage() {
                     </Button>
                   </>
                 ) : null}
-                {data.startup.pitchDeckId && (
-                  <>
-                    <Link to="/startups/$id/chat" params={{ id }}>
-                      <Button variant="outline">
-                        <MessageCircle className="mr-1.5 h-4 w-4" />
-                        AI Chat
-                      </Button>
-                    </Link>
-                    <Link to="/startups/$id/due-diligence" params={{ id }}>
-                      <Button variant="outline">
-                        <ShieldCheck className="mr-1.5 h-4 w-4" />
-                        Due Diligence
-                      </Button>
-                    </Link>
-                    {data.isOwner && (
-                      <Link to="/founder/startups/$id/improve" params={{ id }}>
-                        <Button variant="outline">
-                          <Sparkles className="mr-1.5 h-4 w-4" />
-                          Improve Pitch
-                        </Button>
-                      </Link>
-                    )}
-                  </>
+                <Link to="/startups/$id/chat" params={{ id }}>
+                  <Button variant="outline">
+                    <MessageCircle className="mr-1.5 h-4 w-4" />
+                    AI Chat
+                  </Button>
+                </Link>
+                <Link to="/startups/$id/due-diligence" params={{ id }}>
+                  <Button variant="outline">
+                    <ShieldCheck className="mr-1.5 h-4 w-4" />
+                    Due Diligence
+                  </Button>
+                </Link>
+                {data.isOwner && (
+                  <Link to="/founder/startups/$id/improve" params={{ id }}>
+                    <Button variant="outline">
+                      <Sparkles className="mr-1.5 h-4 w-4" />
+                      Improve Pitch
+                    </Button>
+                  </Link>
                 )}
               </div>
             </div>

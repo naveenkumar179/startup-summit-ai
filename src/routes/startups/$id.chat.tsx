@@ -127,8 +127,28 @@ function StartupChatPage() {
   const sidebarItems =
     user?.role === "investor" ? investorSidebar("discover") : founderSidebar("startups");
 
+  const noDeck = detail && !detail.startup?.pitchDeckId;
+
   return (
     <DashboardLayout items={sidebarItems} title={`AI Chat — ${detail?.startup?.name ?? ""}`}>
+      {noDeck ? (
+        <div className="mx-auto max-w-xl rounded-2xl border border-dashed border-border bg-card p-10 text-center">
+          <Bot className="mx-auto h-8 w-8 text-muted-foreground" />
+          <h3 className="mt-3 font-semibold text-foreground">No pitch deck linked</h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Link a pitch deck to this startup to enable AI Chat. The AI will answer questions based
+            on the deck&apos;s contents.
+          </p>
+          {user?.role === "founder" && (
+            <a
+              href={`/founder/startups/${id}/edit`}
+              className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+            >
+              Link a pitch deck →
+            </a>
+          )}
+        </div>
+      ) : (
       <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 lg:grid-cols-[1fr_260px]">
         <div className="flex h-[70vh] flex-col rounded-2xl border border-border bg-card">
           <div className="flex items-center justify-between border-b border-border p-4">
@@ -292,6 +312,7 @@ function StartupChatPage() {
           </div>
         </div>
       </div>
+      )}
     </DashboardLayout>
   );
 }
