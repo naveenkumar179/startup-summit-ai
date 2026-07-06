@@ -10,10 +10,15 @@ const REPLIT_DOMAINS = (process.env.REPLIT_DOMAINS ?? "").split(",").filter(Bool
 let configPromise: Promise<client.Configuration> | undefined;
 
 function getOidcConfig() {
+  if (!process.env.REPL_ID) {
+    throw new Error(
+      "REPL_ID environment variable is not set. Replit Auth requires this to be configured."
+    );
+  }
   if (!configPromise) {
     configPromise = client.discovery(
       new URL(process.env.ISSUER_URL ?? "https://replit.com/oidc"),
-      process.env.REPL_ID!
+      process.env.REPL_ID
     );
   }
   return configPromise;
