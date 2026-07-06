@@ -9,7 +9,7 @@ import { founderSidebar } from "@/components/dashboard/sidebars";
 import { useAuth } from "@/hooks/use-auth";
 import type { ImprovementSuggestion, PitchDeck, Startup } from "@/lib/server/db/schema";
 
-export const Route = createFileRoute("/founder/startups/$id/improve")({
+export const Route = createFileRoute("/founder/startups/$id_/improve")({
   component: ImprovePitchPage,
 });
 

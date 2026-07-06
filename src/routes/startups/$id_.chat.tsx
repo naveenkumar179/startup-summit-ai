@@ -18,7 +18,7 @@ import { founderSidebar, investorSidebar } from "@/components/dashboard/sidebars
 import { useAuth } from "@/hooks/use-auth";
 import type { Startup } from "@/lib/server/db/schema";
 
-export const Route = createFileRoute("/startups/$id/chat")({
+export const Route = createFileRoute("/startups/$id_/chat")({
   component: StartupChatPage,
 });
 

@@ -8,7 +8,7 @@ import { founderSidebar, investorSidebar } from "@/components/dashboard/sidebars
 import { useAuth } from "@/hooks/use-auth";
 import type { DetailedAnalysis, Startup } from "@/lib/server/db/schema";
 
-export const Route = createFileRoute("/startups/$id/due-diligence")({
+export const Route = createFileRoute("/startups/$id_/due-diligence")({
   component: DueDiligencePage,
 });
 

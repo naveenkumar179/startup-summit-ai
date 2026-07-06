@@ -34,8 +34,8 @@ import { Route as ApiPitchDeckIndexRouteImport } from './routes/api/pitch-deck/i
 import { Route as ApiNotificationsIndexRouteImport } from './routes/api/notifications/index'
 import { Route as ApiMeetingsIndexRouteImport } from './routes/api/meetings/index'
 import { Route as ApiConversationsIndexRouteImport } from './routes/api/conversations/index'
-import { Route as StartupsIdDueDiligenceRouteImport } from './routes/startups/$id.due-diligence'
-import { Route as StartupsIdChatRouteImport } from './routes/startups/$id.chat'
+import { Route as StartupsIdDueDiligenceRouteImport } from './routes/startups/$id_.due-diligence'
+import { Route as StartupsIdChatRouteImport } from './routes/startups/$id_.chat'
 import { Route as FounderStartupsNewRouteImport } from './routes/founder/startups/new'
 import { Route as ApiWatchlistIdRouteImport } from './routes/api/watchlist/$id'
 import { Route as ApiStartupsDiscoverRouteImport } from './routes/api/startups/discover'
@@ -49,7 +49,7 @@ import { Route as ApiInvestorProfileRouteImport } from './routes/api/investor/pr
 import { Route as ApiFounderProfileRouteImport } from './routes/api/founder/profile'
 import { Route as ApiAuthUserRouteImport } from './routes/api/auth/user'
 import { Route as ApiAuthRoleRouteImport } from './routes/api/auth/role'
-import { Route as FounderStartupsIdImproveRouteImport } from './routes/founder/startups/$id.improve'
+import { Route as FounderStartupsIdImproveRouteImport } from './routes/founder/startups/$id_.improve'
 import { Route as FounderStartupsIdEditRouteImport } from './routes/founder/startups/$id.edit'
 import { Route as ApiStartupsIdImproveRouteImport } from './routes/api/startups/$id/improve'
 import { Route as ApiStartupsIdChatRouteImport } from './routes/api/startups/$id/chat'
@@ -182,14 +182,14 @@ const ApiConversationsIndexRoute = ApiConversationsIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const StartupsIdDueDiligenceRoute = StartupsIdDueDiligenceRouteImport.update({
-  id: '/due-diligence',
-  path: '/due-diligence',
-  getParentRoute: () => StartupsIdRoute,
+  id: '/startups/$id_/due-diligence',
+  path: '/startups/$id/due-diligence',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const StartupsIdChatRoute = StartupsIdChatRouteImport.update({
-  id: '/chat',
-  path: '/chat',
-  getParentRoute: () => StartupsIdRoute,
+  id: '/startups/$id_/chat',
+  path: '/startups/$id/chat',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const FounderStartupsNewRoute = FounderStartupsNewRouteImport.update({
   id: '/founder/startups/new',
@@ -258,7 +258,7 @@ const ApiAuthRoleRoute = ApiAuthRoleRouteImport.update({
 } as any)
 const FounderStartupsIdImproveRoute =
   FounderStartupsIdImproveRouteImport.update({
-    id: '/founder/startups/$id/improve',
+    id: '/founder/startups/$id_/improve',
     path: '/founder/startups/$id/improve',
     getParentRoute: () => rootRouteImport,
   } as any)
@@ -307,7 +307,7 @@ export interface FileRoutesByFullPath {
   '/investor/meetings': typeof InvestorMeetingsRoute
   '/investor/portfolio': typeof InvestorPortfolioRoute
   '/investor/watchlist': typeof InvestorWatchlistRoute
-  '/startups/$id': typeof StartupsIdRouteWithChildren
+  '/startups/$id': typeof StartupsIdRoute
   '/api/auth/role': typeof ApiAuthRoleRoute
   '/api/auth/user': typeof ApiAuthUserRoute
   '/api/founder/profile': typeof ApiFounderProfileRoute
@@ -355,7 +355,7 @@ export interface FileRoutesByTo {
   '/investor/meetings': typeof InvestorMeetingsRoute
   '/investor/portfolio': typeof InvestorPortfolioRoute
   '/investor/watchlist': typeof InvestorWatchlistRoute
-  '/startups/$id': typeof StartupsIdRouteWithChildren
+  '/startups/$id': typeof StartupsIdRoute
   '/api/auth/role': typeof ApiAuthRoleRoute
   '/api/auth/user': typeof ApiAuthUserRoute
   '/api/founder/profile': typeof ApiFounderProfileRoute
@@ -404,7 +404,7 @@ export interface FileRoutesById {
   '/investor/meetings': typeof InvestorMeetingsRoute
   '/investor/portfolio': typeof InvestorPortfolioRoute
   '/investor/watchlist': typeof InvestorWatchlistRoute
-  '/startups/$id': typeof StartupsIdRouteWithChildren
+  '/startups/$id': typeof StartupsIdRoute
   '/api/auth/role': typeof ApiAuthRoleRoute
   '/api/auth/user': typeof ApiAuthUserRoute
   '/api/founder/profile': typeof ApiFounderProfileRoute
@@ -418,8 +418,8 @@ export interface FileRoutesById {
   '/api/startups/discover': typeof ApiStartupsDiscoverRoute
   '/api/watchlist/$id': typeof ApiWatchlistIdRoute
   '/founder/startups/new': typeof FounderStartupsNewRoute
-  '/startups/$id/chat': typeof StartupsIdChatRoute
-  '/startups/$id/due-diligence': typeof StartupsIdDueDiligenceRoute
+  '/startups/$id_/chat': typeof StartupsIdChatRoute
+  '/startups/$id_/due-diligence': typeof StartupsIdDueDiligenceRoute
   '/api/conversations/': typeof ApiConversationsIndexRoute
   '/api/meetings/': typeof ApiMeetingsIndexRoute
   '/api/notifications/': typeof ApiNotificationsIndexRoute
@@ -432,7 +432,7 @@ export interface FileRoutesById {
   '/api/startups/$id/chat': typeof ApiStartupsIdChatRoute
   '/api/startups/$id/improve': typeof ApiStartupsIdImproveRoute
   '/founder/startups/$id/edit': typeof FounderStartupsIdEditRoute
-  '/founder/startups/$id/improve': typeof FounderStartupsIdImproveRoute
+  '/founder/startups/$id_/improve': typeof FounderStartupsIdImproveRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -564,8 +564,8 @@ export interface FileRouteTypes {
     | '/api/startups/discover'
     | '/api/watchlist/$id'
     | '/founder/startups/new'
-    | '/startups/$id/chat'
-    | '/startups/$id/due-diligence'
+    | '/startups/$id_/chat'
+    | '/startups/$id_/due-diligence'
     | '/api/conversations/'
     | '/api/meetings/'
     | '/api/notifications/'
@@ -578,7 +578,7 @@ export interface FileRouteTypes {
     | '/api/startups/$id/chat'
     | '/api/startups/$id/improve'
     | '/founder/startups/$id/edit'
-    | '/founder/startups/$id/improve'
+    | '/founder/startups/$id_/improve'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -599,7 +599,7 @@ export interface RootRouteChildren {
   InvestorMeetingsRoute: typeof InvestorMeetingsRoute
   InvestorPortfolioRoute: typeof InvestorPortfolioRoute
   InvestorWatchlistRoute: typeof InvestorWatchlistRoute
-  StartupsIdRoute: typeof StartupsIdRouteWithChildren
+  StartupsIdRoute: typeof StartupsIdRoute
   ApiAuthRoleRoute: typeof ApiAuthRoleRoute
   ApiAuthUserRoute: typeof ApiAuthUserRoute
   ApiFounderProfileRoute: typeof ApiFounderProfileRoute
@@ -613,6 +613,8 @@ export interface RootRouteChildren {
   ApiStartupsDiscoverRoute: typeof ApiStartupsDiscoverRoute
   ApiWatchlistIdRoute: typeof ApiWatchlistIdRoute
   FounderStartupsNewRoute: typeof FounderStartupsNewRoute
+  StartupsIdChatRoute: typeof StartupsIdChatRoute
+  StartupsIdDueDiligenceRoute: typeof StartupsIdDueDiligenceRoute
   ApiConversationsIndexRoute: typeof ApiConversationsIndexRoute
   ApiMeetingsIndexRoute: typeof ApiMeetingsIndexRoute
   ApiNotificationsIndexRoute: typeof ApiNotificationsIndexRoute
@@ -802,19 +804,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiConversationsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/startups/$id/due-diligence': {
-      id: '/startups/$id/due-diligence'
-      path: '/due-diligence'
+    '/startups/$id_/due-diligence': {
+      id: '/startups/$id_/due-diligence'
+      path: '/startups/$id/due-diligence'
       fullPath: '/startups/$id/due-diligence'
       preLoaderRoute: typeof StartupsIdDueDiligenceRouteImport
-      parentRoute: typeof StartupsIdRoute
+      parentRoute: typeof rootRouteImport
     }
-    '/startups/$id/chat': {
-      id: '/startups/$id/chat'
-      path: '/chat'
+    '/startups/$id_/chat': {
+      id: '/startups/$id_/chat'
+      path: '/startups/$id/chat'
       fullPath: '/startups/$id/chat'
       preLoaderRoute: typeof StartupsIdChatRouteImport
-      parentRoute: typeof StartupsIdRoute
+      parentRoute: typeof rootRouteImport
     }
     '/founder/startups/new': {
       id: '/founder/startups/new'
@@ -907,8 +909,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthRoleRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/founder/startups/$id/improve': {
-      id: '/founder/startups/$id/improve'
+    '/founder/startups/$id_/improve': {
+      id: '/founder/startups/$id_/improve'
       path: '/founder/startups/$id/improve'
       fullPath: '/founder/startups/$id/improve'
       preLoaderRoute: typeof FounderStartupsIdImproveRouteImport
@@ -952,20 +954,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface StartupsIdRouteChildren {
-  StartupsIdChatRoute: typeof StartupsIdChatRoute
-  StartupsIdDueDiligenceRoute: typeof StartupsIdDueDiligenceRoute
-}
-
-const StartupsIdRouteChildren: StartupsIdRouteChildren = {
-  StartupsIdChatRoute: StartupsIdChatRoute,
-  StartupsIdDueDiligenceRoute: StartupsIdDueDiligenceRoute,
-}
-
-const StartupsIdRouteWithChildren = StartupsIdRoute._addFileChildren(
-  StartupsIdRouteChildren,
-)
-
 interface ApiStartupsIdRouteChildren {
   ApiStartupsIdAnalyzeRoute: typeof ApiStartupsIdAnalyzeRoute
   ApiStartupsIdChatRoute: typeof ApiStartupsIdChatRoute
@@ -1000,7 +988,7 @@ const rootRouteChildren: RootRouteChildren = {
   InvestorMeetingsRoute: InvestorMeetingsRoute,
   InvestorPortfolioRoute: InvestorPortfolioRoute,
   InvestorWatchlistRoute: InvestorWatchlistRoute,
-  StartupsIdRoute: StartupsIdRouteWithChildren,
+  StartupsIdRoute: StartupsIdRoute,
   ApiAuthRoleRoute: ApiAuthRoleRoute,
   ApiAuthUserRoute: ApiAuthUserRoute,
   ApiFounderProfileRoute: ApiFounderProfileRoute,
@@ -1014,6 +1002,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiStartupsDiscoverRoute: ApiStartupsDiscoverRoute,
   ApiWatchlistIdRoute: ApiWatchlistIdRoute,
   FounderStartupsNewRoute: FounderStartupsNewRoute,
+  StartupsIdChatRoute: StartupsIdChatRoute,
+  StartupsIdDueDiligenceRoute: StartupsIdDueDiligenceRoute,
   ApiConversationsIndexRoute: ApiConversationsIndexRoute,
   ApiMeetingsIndexRoute: ApiMeetingsIndexRoute,
   ApiNotificationsIndexRoute: ApiNotificationsIndexRoute,
