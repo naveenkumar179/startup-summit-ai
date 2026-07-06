@@ -72,16 +72,41 @@ function FounderDashboard() {
   const totalStartups = startups?.length ?? 0;
   const published = startups?.filter((s) => s.status === "published").length ?? 0;
   const aiAnalyses = startups?.filter((s) => s.detailedAnalysis).length ?? 0;
+  const totalViews = startups?.reduce((sum, s) => sum + (s.viewCount ?? 0), 0) ?? 0;
 
   const suggestionsSource = startups?.find(
-    (s) => s.improvementSuggestions && s.improvementSuggestions.length > 0
+    (s) => s.improvementSuggestions && s.improvementSuggestions.length > 0,
   );
 
   const stats = [
-    { label: "Total Startups", value: String(totalStartups), icon: Rocket, color: "text-primary", bg: "bg-accent" },
-    { label: "Published", value: String(published), icon: CheckCircle2, color: "text-success", bg: "bg-success/10" },
-    { label: "AI Analyses", value: String(aiAnalyses), icon: TrendingUp, color: "text-warning", bg: "bg-warning/10" },
-    { label: "Profile Views", value: "0", icon: Eye, color: "text-primary", bg: "bg-accent" },
+    {
+      label: "Total Startups",
+      value: String(totalStartups),
+      icon: Rocket,
+      color: "text-primary",
+      bg: "bg-accent",
+    },
+    {
+      label: "Published",
+      value: String(published),
+      icon: CheckCircle2,
+      color: "text-success",
+      bg: "bg-success/10",
+    },
+    {
+      label: "AI Analyses",
+      value: String(aiAnalyses),
+      icon: TrendingUp,
+      color: "text-warning",
+      bg: "bg-warning/10",
+    },
+    {
+      label: "Profile Views",
+      value: String(totalViews),
+      icon: Eye,
+      color: "text-primary",
+      bg: "bg-accent",
+    },
   ];
 
   return (
@@ -95,7 +120,9 @@ function FounderDashboard() {
             <h2 className="text-xl font-semibold text-foreground">
               Welcome back{user?.firstName ? `, ${user.firstName}` : ""}!
             </h2>
-            <p className="text-sm text-muted-foreground">Here's what's happening with your startups.</p>
+            <p className="text-sm text-muted-foreground">
+              Here's what's happening with your startups.
+            </p>
           </div>
         </div>
         <Link
@@ -123,7 +150,10 @@ function FounderDashboard() {
         <div className="rounded-2xl border border-border bg-card p-5 lg:col-span-2">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="font-semibold text-foreground">My Startups</h3>
-            <Link to="/founder/startups" className="flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+            <Link
+              to="/founder/startups"
+              className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+            >
               View all startups
               <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
@@ -160,7 +190,11 @@ function FounderDashboard() {
                   >
                     <div className="flex min-w-0 items-center gap-3">
                       {s.logoUrl ? (
-                        <img src={s.logoUrl} alt="" className="h-10 w-10 shrink-0 rounded-lg object-cover" />
+                        <img
+                          src={s.logoUrl}
+                          alt=""
+                          className="h-10 w-10 shrink-0 rounded-lg object-cover"
+                        />
                       ) : (
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent">
                           <Rocket className="h-5 w-5 text-primary" />
@@ -169,7 +203,10 @@ function FounderDashboard() {
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
                           <h4 className="truncate font-medium text-foreground">{s.name}</h4>
-                          <Badge variant={s.status === "published" ? "default" : "outline"} className="shrink-0">
+                          <Badge
+                            variant={s.status === "published" ? "default" : "outline"}
+                            className="shrink-0"
+                          >
                             {s.status === "published" ? "Published" : "Draft"}
                           </Badge>
                         </div>
@@ -202,7 +239,8 @@ function FounderDashboard() {
 
           {!suggestionsSource ? (
             <p className="text-sm text-muted-foreground">
-              Generate an "Improve Pitch" analysis on one of your startups to see AI suggestions here.
+              Generate an "Improve Pitch" analysis on one of your startups to see AI suggestions
+              here.
             </p>
           ) : (
             <div className="space-y-4">

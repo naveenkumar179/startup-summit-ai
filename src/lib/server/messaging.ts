@@ -1,6 +1,7 @@
 import { and, desc, eq, or } from "drizzle-orm";
 import { db } from "./db";
 import { conversations, messages, users, type User } from "./db/schema";
+import { createNotification } from "./notifications";
 
 export async function getOrCreateConversation(
   founderId: string,
@@ -92,6 +93,28 @@ export async function sendMessage(conversationId: string, senderId: string, cont
     .update(conversations)
     .set({ updatedAt: new Date() })
     .where(eq(conversations.id, conversationId));
+
+  const [conversation] = await db
+    .select()
+    .from(conversations)
+    .where(eq(conversations.id, conversationId));
+
+  if (conversation) {
+    const recipientId =
+      conversation.founderId === senderId ? conversation.investorId : conversation.founderId;
+    const [sender] = await db.select().from(users).where(eq(users.id, senderId));
+    const senderName = sender
+      ? `${sender.firstName ?? ""} ${sender.lastName ?? ""}`.trim() || "Someone"
+      : "Someone";
+
+    await createNotification({
+      userId: recipientId,
+      type: "message_received",
+      title: `New message from ${senderName}`,
+      body: content.length > 120 ? `${content.slice(0, 120)}…` : content,
+      link: "/messages",
+    });
+  }
 
   return message;
 }

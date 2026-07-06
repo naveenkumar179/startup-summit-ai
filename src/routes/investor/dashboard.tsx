@@ -43,6 +43,13 @@ async function fetchWatchlistIds(): Promise<string[]> {
   return items.map((i) => i.watchlist.startupId);
 }
 
+async function fetchConversationCount(): Promise<number> {
+  const res = await fetch("/api/conversations");
+  if (!res.ok) return 0;
+  const data = (await res.json()) as { conversations: unknown[] };
+  return data.conversations?.length ?? 0;
+}
+
 function InvestorDashboard() {
   const { user, isLoading, isAuthenticated, hasRole } = useAuth();
   const navigate = useNavigate();
@@ -76,6 +83,12 @@ function InvestorDashboard() {
     enabled,
   });
 
+  const { data: conversationCount } = useQuery({
+    queryKey: ["/api/conversations", "count"],
+    queryFn: fetchConversationCount,
+    enabled,
+  });
+
   const ranked = useMemo(() => {
     return [...(startups ?? [])].sort((a, b) => {
       const sa = a.detailedAnalysis?.investmentReadinessScore ?? -1;
@@ -95,11 +108,37 @@ function InvestorDashboard() {
     );
   }
 
+  const reportsAvailable = startups?.filter((s) => s.detailedAnalysis).length ?? 0;
+
   const stats = [
-    { label: "Startups Reviewed", value: String(startups?.length ?? 0), icon: Rocket, color: "text-primary", bg: "bg-accent" },
-    { label: "Saved Startups", value: String(watchlistIds?.length ?? 0), icon: Bookmark, color: "text-success", bg: "bg-success/10" },
-    { label: "Due Diligence Reports", value: "0", icon: ShieldCheck, color: "text-warning", bg: "bg-warning/10" },
-    { label: "Messages", value: "0", icon: MessageSquare, color: "text-primary", bg: "bg-accent" },
+    {
+      label: "Startups Reviewed",
+      value: String(startups?.length ?? 0),
+      icon: Rocket,
+      color: "text-primary",
+      bg: "bg-accent",
+    },
+    {
+      label: "Saved Startups",
+      value: String(watchlistIds?.length ?? 0),
+      icon: Bookmark,
+      color: "text-success",
+      bg: "bg-success/10",
+    },
+    {
+      label: "AI Reports Available",
+      value: String(reportsAvailable),
+      icon: ShieldCheck,
+      color: "text-warning",
+      bg: "bg-warning/10",
+    },
+    {
+      label: "Active Conversations",
+      value: String(conversationCount ?? 0),
+      icon: MessageSquare,
+      color: "text-primary",
+      bg: "bg-accent",
+    },
   ];
 
   return (
@@ -135,7 +174,10 @@ function InvestorDashboard() {
       <div className="mt-6">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="font-semibold text-foreground">Discover Innovative Startups</h3>
-          <Link to="/investor/discover" className="flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+          <Link
+            to="/investor/discover"
+            className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+          >
             View all
             <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
@@ -149,7 +191,9 @@ function InvestorDashboard() {
           <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center">
             <Rocket className="mx-auto h-8 w-8 text-muted-foreground" />
             <h4 className="mt-3 font-semibold text-foreground">No startups published yet</h4>
-            <p className="mt-1 text-sm text-muted-foreground">Check back soon as founders publish new startups.</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Check back soon as founders publish new startups.
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -163,7 +207,10 @@ function InvestorDashboard() {
                   className="flex h-full flex-col rounded-2xl border border-border bg-card p-5 transition hover:border-primary/50 hover:shadow-sm"
                 >
                   {score != null && (
-                    <Badge className="w-fit gap-1 bg-accent text-primary hover:bg-accent" variant="secondary">
+                    <Badge
+                      className="w-fit gap-1 bg-accent text-primary hover:bg-accent"
+                      variant="secondary"
+                    >
                       <Sparkles className="h-3 w-3" />
                       AI Analysis
                     </Badge>
@@ -181,14 +228,19 @@ function InvestorDashboard() {
                       <p className="text-xs text-muted-foreground">{s.industry}</p>
                     </div>
                   </div>
-                  {s.tagline && <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">{s.tagline}</p>}
+                  {s.tagline && (
+                    <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">{s.tagline}</p>
+                  )}
                   <div className="mt-4 flex flex-wrap items-center gap-1.5">
                     <Badge variant="secondary">{stageLabel(s.stage)}</Badge>
                     {s.fundingRequired && <Badge variant="outline">{s.fundingRequired}</Badge>}
                   </div>
                   <div className="mt-4 flex items-center justify-between">
                     {score != null ? (
-                      <Badge className="gap-1 bg-success/10 text-success hover:bg-success/10" variant="secondary">
+                      <Badge
+                        className="gap-1 bg-success/10 text-success hover:bg-success/10"
+                        variant="secondary"
+                      >
                         {score} {scoreLabel(score)}
                       </Badge>
                     ) : (
@@ -229,7 +281,11 @@ function InvestorDashboard() {
                       <td className="py-3 pr-4">
                         <div className="flex items-center gap-2">
                           {s.logoUrl ? (
-                            <img src={s.logoUrl} alt="" className="h-8 w-8 rounded-lg object-cover" />
+                            <img
+                              src={s.logoUrl}
+                              alt=""
+                              className="h-8 w-8 rounded-lg object-cover"
+                            />
                           ) : (
                             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent">
                               <Rocket className="h-4 w-4 text-primary" />
@@ -245,14 +301,19 @@ function InvestorDashboard() {
                       <td className="py-3 pr-4 text-muted-foreground">{stageLabel(s.stage)}</td>
                       <td className="py-3 pr-4">
                         {score != null ? (
-                          <Badge variant="secondary" className="bg-success/10 text-success hover:bg-success/10">
+                          <Badge
+                            variant="secondary"
+                            className="bg-success/10 text-success hover:bg-success/10"
+                          >
                             {score}
                           </Badge>
                         ) : (
                           <span className="text-muted-foreground">—</span>
                         )}
                       </td>
-                      <td className="py-3 pr-4 text-muted-foreground">{s.fundingRequired ?? "—"}</td>
+                      <td className="py-3 pr-4 text-muted-foreground">
+                        {s.fundingRequired ?? "—"}
+                      </td>
                       <td className="py-3 text-right">
                         <Link
                           to="/startups/$id"

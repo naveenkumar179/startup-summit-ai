@@ -2,7 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { and, eq } from "drizzle-orm";
 import { requireUser } from "@/lib/server/auth";
 import { db } from "@/lib/server/db";
-import { investorProfiles, pitchDecks, startups, startupStageEnum, watchlist } from "@/lib/server/db/schema";
+import {
+  investorProfiles,
+  pitchDecks,
+  startups,
+  startupStageEnum,
+  watchlist,
+} from "@/lib/server/db/schema";
 import { scoreStartupForInvestor } from "@/lib/server/matching";
 
 function jsonResponse(body: unknown, status = 200) {
@@ -28,6 +34,15 @@ export const Route = createFileRoute("/api/startups/$id")({
           const isOwner = startup.founderId === user.id;
           if (!isOwner && startup.status !== "published") {
             return jsonResponse({ message: "Startup not found" }, 404);
+          }
+
+          if (!isOwner) {
+            const [viewed] = await db
+              .update(startups)
+              .set({ viewCount: startup.viewCount + 1 })
+              .where(eq(startups.id, startup.id))
+              .returning();
+            if (viewed) startup.viewCount = viewed.viewCount;
           }
 
           const [deck] = startup.pitchDeckId

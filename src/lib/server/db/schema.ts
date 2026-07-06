@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { boolean, index, jsonb, pgEnum, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import { boolean, index, integer, jsonb, pgEnum, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
 
 export const userRoleEnum = pgEnum("user_role", ["founder", "investor", "admin"]);
 
@@ -199,6 +199,7 @@ export const startups = pgTable(
     logoUrl: text("logo_url"),
     pitchDeckId: varchar("pitch_deck_id").references(() => pitchDecks.id, { onDelete: "set null" }),
     status: startupStatusEnum("status").notNull().default("draft"),
+    viewCount: integer("view_count").notNull().default(0),
     detailedAnalysis: jsonb("detailed_analysis").$type<DetailedAnalysis>(),
     improvementSuggestions: jsonb("improvement_suggestions").$type<ImprovementSuggestion[]>(),
     createdAt: timestamp("created_at").defaultNow(),
