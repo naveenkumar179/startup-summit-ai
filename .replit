@@ -43,3 +43,9 @@ outputType = "webview"
 deploymentTarget = "autoscale"
 run = ["node", ".output/server/index.mjs"]
 build = ["bun", "run", "build"]
+
+[userenv]
+
+[userenv.shared]
+LANGSMITH_PROJECT = "startupbridge"
+LANGSMITH_TRACING = "true"
